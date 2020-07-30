@@ -1,0 +1,52 @@
+# Lexer
+# FM
+```mermaid
+graph LR
+    0(start) --alpha,underline--> 1;
+    0 --digit--> 2;
+    0 --space,enter,eof--> 0.1(no token);
+    0 --comma--> 0.2(COMMA);
+    0 --dot--> 0.3(DOT);
+    0 --semi--> 0.4(SEMI);
+    0 --assign--> 4;
+    0 --parentheses_l--> 0.5(PARENTHESES_L);
+    0 --parentheses_r--> 0.6(PARENTHESES_R);
+    0 --bracket_l--> 0.7(BRACKET_L);
+    0 --bracket_r--> 0.8(BRACKET_R);
+    0 --brace_l--> 0.9(BRACE_L);
+    0 --brace_r--> 0.10(BRACE_R);
+    0 --angle_bracket_l--> 5;
+    0 --angle_bracket_r--> 6;
+    0 --add--> 7;
+    0 --sub--> 8;
+
+    1 --alpha,underline,digit--> 1;
+    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub--> 1.1{is key word?};
+
+    2 --digit--> 2;
+    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub--> 2.1(INTEGER);
+    2 --dot--> 3;
+
+    1.1 --yes--> 1.1.1(KEY_WORD);
+    1.1 --no--> 1.1.2(VARIABLE);
+
+    3 --digit--> 3;
+    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub--> 3.1(FLOAT_POINT);
+
+    4 --assign--> 4.1(EQUAL);
+    4 --space,enter,alpha,underline,digit,parentheses_l,bracket_l--> 4.2(ASSIGN);
+
+    5 --space,enter,alpha,underline,digit,parentheses_l--> 5.1(ANGLE_BRACKET_L);
+    5 --angle_bracket_l--> 5.2(MOVE_L);
+
+    6 --space,enter,alpha,underline,parentheses_l,comma-->6.1(ANGLE_BRACKET_R);
+    6 --angle_bracket_r--> 6.2(MOVE_R);
+
+    7 --space,enter,alpha,digit,underline,parentheses_l--> 7.1(ADD);
+    7 --add--> 7.2(INCREASE);
+    7 --assign--> 7.3(ASSIGN_ADD);
+
+    8 --space,enter,alpha,digit,underline,parentheses_l--> 8.1(SUB);
+    8 --sub--> 8.2(DECREASE);
+    8 --assign--> 8.3(ASSIGN_SUB);
+```
