@@ -40,9 +40,11 @@ graph LR
 
     5 --space,enter,alpha,underline,digit,parentheses_l--> 5.1(ANGLE_BRACKET_L);
     5 --angle_bracket_l--> 5.2(MOVE_L);
+    5 --assign--> 5.3(LEQ);
 
     6 --space,enter,alpha,underline,parentheses_l,comma-->6.1(ANGLE_BRACKET_R);
     6 --angle_bracket_r--> 6.2(MOVE_R);
+    6 --assign--> 6.3(GEQ);
 
     7 --space,enter,alpha,digit,underline,parentheses_l--> 7.1(ADD);
     7 --add--> 7.2(INCREASE);

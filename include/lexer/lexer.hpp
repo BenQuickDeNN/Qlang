@@ -188,6 +188,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 break;
+
             case JumpState::TOK_ADD:
                 ret.emplace_back(Token(tmp_str, TokType::ADD));
                 tmp_str = "";
@@ -251,6 +252,19 @@ public:
             case JumpState::TOK_ASSIGN_DIV:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::ASSIGN_DIV));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+
+            case JumpState::TOK_LEQ:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::LEQ));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_GEQ:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::GEQ));
                 tmp_str = "";
                 state = JumpState::START;
                 break;

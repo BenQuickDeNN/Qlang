@@ -24,11 +24,13 @@ void test1()
     }\n\
     int a = 0;\n\
     /* kernel */\n\
-    for (int i = 0; i < _size; i++)\n\
+    for (int i = 0; i <= _size; i++)\n\
     {\n\
     \ta = func<int, float>(2 + 1.54 * 6.0 - 4.568);\n\
     \ta *= 2.4;\n\
     \ta /= 1.0 +2.35 / 20;\n\
+    \tif (i >= 5)\n\
+    \t\ta += 5.5;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -122,6 +124,12 @@ void test1()
             break;
         case TokType::ASSIGN_DIV:
             cout << "ASSIGN_DIV";
+            break;
+        case TokType::LEQ:
+            cout << "LEQ";
+            break;
+        case TokType::GEQ:
+            cout << "GEQ";
             break;
         default:
             break;

@@ -39,7 +39,10 @@ enum TokType
     ASSIGN_ADD,
     ASSIGN_SUB,
     ASSIGN_MUL,
-    ASSIGN_DIV
+    ASSIGN_DIV,
+
+    LEQ,
+    GEQ
 };
 
 /**
