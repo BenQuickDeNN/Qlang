@@ -26,7 +26,7 @@ public:
         while (idx < str.size())
         {
             c = str[idx];
-            // std::cout << "get '" << c << "'" << std::endl;
+            // std::cout << "get '" << c << "', ascii=" << (int)c << std::endl;
             ct = getCharType(c);
             last_state = state;
             if (JUMP_TABLE.find({state, ct}) != JUMP_TABLE.end())
@@ -44,6 +44,8 @@ public:
             case JumpState::START:
                 // 从注释段恢复
                 if (ct == CharType::CT_DIV && last_state == JumpState::STATE12)
+                    ++idx;
+                else if (ct == CharType::ENTER && last_state == JumpState::STATE13)
                     ++idx;
                 break;
 
@@ -297,6 +299,12 @@ public:
                 // do nothing
                 break;
             case JumpState::STATE12:
+                // do nothing
+                break;
+            case JumpState::STATE13:
+                // do nothing
+                break;
+            case JumpState::STATE14:
                 // do nothing
                 break;
 

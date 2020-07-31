@@ -56,6 +56,7 @@ enum CharType
     SPACE,
     ENTER,
     CT_EOF,
+    CT_ESCAPE_CHAR,
 
     CT_COMMA,
     CT_DOT,
@@ -84,16 +85,23 @@ static CharType getCharType(const char &c)
         return CharType::ALPHA;
     else if (std::isdigit(c))
         return CharType::DIGIT;
-    else if (std::isspace(c) || c == '\t')
-        return CharType::SPACE;
     else
         switch (c)
         {
-        case '\n':
-            return CharType::ENTER;
+        case ' ':
+            return CharType::SPACE;
+            break;
+        case '\t':
+            return CharType::SPACE;
             break;
         case '\r':
             return CharType::ENTER;
+            break;
+        case '\n':
+            return CharType::ENTER;
+            break;
+        case '\\':
+            return CharType::CT_ESCAPE_CHAR;
             break;
 
         case ',':

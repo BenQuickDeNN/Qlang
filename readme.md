@@ -68,6 +68,8 @@ graph LR
 
     13 --escapeChar--> 14;
     13 --enter--> 0;
+    13 --other--> 13;
 
-    14 --all--> 13;
+    14 --escapeChar--> 14;
+    14 --other--> 13;
 ```

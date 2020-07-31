@@ -8,7 +8,6 @@ void test2();
 int main()
 {
     test1();
-    // test2();
     return 0;
 }
 void test1()
@@ -20,7 +19,8 @@ void test1()
         */\n\
     template<typname type> type func(type param_1, type param_2)\n\
     {\n\
-    \tint ret_val = param_1 << param_2 == param_1 >> param_2; return ret_val;  \n\
+    \tint ret_val = param_1 << param_2 == param_1 >> param_2;\n\
+    \treturn ret_val; // return the value \n\
     }\n\
     int a = 0;\n\
     /* kernel */\n\
