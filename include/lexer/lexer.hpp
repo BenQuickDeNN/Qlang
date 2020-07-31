@@ -18,6 +18,8 @@ public:
     {
         std::vector<Token> ret;
         size_t idx = 0;
+        size_t row = 1;
+        size_t charCount = 0;
         char c;
         CharType ct;
         JumpState state = JumpState::START;
@@ -35,6 +37,7 @@ public:
             {
                 std::cerr << "lex error in idx=" << idx << ", c='" << c << "': unknown state or chartype" << std::endl;
                 std::cerr << "state=" << state << ", last_state=" << last_state << ", ct=" << ct << std::endl;
+                logError(row, idx + 1 - charCount, c);
                 return std::vector<Token>(0);
             }
 
@@ -46,7 +49,10 @@ public:
                 if (ct == CharType::CT_DIV && last_state == JumpState::STATE12)
                     ++idx;
                 else if (ct == CharType::ENTER && last_state == JumpState::STATE13)
+                {
+                    ++row;
                     ++idx;
+                }
                 break;
 
             // NAME
@@ -334,6 +340,11 @@ public:
                 return std::vector<Token>(0);
                 break;
             }
+            if (getCharType(str[idx]) == CharType::ENTER)
+            {
+                ++row;
+                charCount = idx + 1;
+            }
             ++idx;
         }
         return ret;
@@ -360,6 +371,12 @@ private:
     static bool checkBackward(const CharType &ct, const CharType &ctype)
     {
         return ct == ctype;
+    }
+    static void logError(const size_t &row, const size_t &col, const char &c)
+    {
+        std::cerr << "lex error in line " << row
+                  << ", column " << col
+                  << ", bad character '" << c << "'." << std::endl;
     }
 };
 
