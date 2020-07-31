@@ -14,11 +14,16 @@ int main()
 void test1()
 {
     string testStr =
-        "template<typname type> type func(type param_1, type param_2)\n\
+        "/**\n\
+          * @author benquick\n\
+          * @brief lexer\n\
+        */\n\
+    template<typname type> type func(type param_1, type param_2)\n\
     {\n\
     \tint ret_val = param_1 << param_2 == param_1 >> param_2; return ret_val;  \n\
     }\n\
     int a = 0;\n\
+    /* kernel */\n\
     for (int i = 0; i < _size; i++)\n\
     {\n\
     \ta = func<int, float>(2 + 1.54 * 6.0 - 4.568);\n\

@@ -41,6 +41,11 @@ public:
             // jump
             switch (state)
             {
+            case JumpState::START:
+                if (ct == CharType::CT_DIV)
+                    ++idx;
+                break;
+
             // NAME
             case JumpState::CHECK_KEYWORD:
                 if (isKeyWord(tmp_str))
@@ -286,6 +291,12 @@ public:
                 break;
             case JumpState::STATE10:
                 tmp_str += c;
+                break;
+            case JumpState::STATE11:
+                // do nothing
+                break;
+            case JumpState::STATE12:
+                // do nothing
                 break;
 
             // no token
