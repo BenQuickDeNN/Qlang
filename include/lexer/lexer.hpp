@@ -42,7 +42,8 @@ public:
             switch (state)
             {
             case JumpState::START:
-                if (ct == CharType::CT_DIV)
+                // 从注释段恢复
+                if (ct == CharType::CT_DIV && last_state == JumpState::STATE12)
                     ++idx;
                 break;
 
