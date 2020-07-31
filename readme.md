@@ -54,10 +54,20 @@ graph LR
 
     9 --space,enter,alpha,digit,underline,parentheses_l--> 9.1(MUL);
     9 --assign--> 9.2(ASSIGN_MUL);
-    #9 --div--> 9.3(NOTATION_R);
 
     10 --space,enter,alpha,digit,underline,parentheses_l--> 10.1(DIV);
     10 --assign--> 10.2(ASSIGN_DIV);
-    #10 --mul--> 10.3(NOTATION_L);
-    #10 --div--> 10.4(NOTATION_LINE);
+    10 --mul--> 11;
+    10 --div--> 13;
+
+    11 --mul--> 12;
+    11 --other--> 11;
+
+    12 --div--> 0;
+    12 --other--> 11;
+
+    13 --escapeChar--> 14;
+    13 --enter--> 0;
+
+    14 --all--> 13;
 ```
