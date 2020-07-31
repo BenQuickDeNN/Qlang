@@ -78,7 +78,7 @@ static CharType getCharType(const char &c)
         return CharType::ALPHA;
     else if (std::isdigit(c))
         return CharType::DIGIT;
-    else if (std::isspace(c))
+    else if (std::isspace(c) || c == '\t')
         return CharType::SPACE;
     else
         switch (c)
