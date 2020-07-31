@@ -21,7 +21,8 @@ void test1()
     int a = 0;\n\
     for (int i = 0; i < _size; i+=1)\n\
     {\n\
-    a = func<int, float>(2 + 6.0 - 4.568);\n\
+    a = func<int, float>(2 + 1.54 * 6.0 - 4.568);\n\
+    a *= 2.4;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -92,6 +93,9 @@ void test1()
         case TokType::SUB:
             cout << "SUB";
             break;
+        case TokType::MUL:
+            cout << "MUL";
+            break;
         case TokType::INCREASE:
             cout << "INCREASE";
             break;
@@ -103,6 +107,9 @@ void test1()
             break;
         case TokType::ASSIGN_SUB:
             cout << "ASSIGN_SUB";
+            break;
+        case TokType::ASSIGN_MUL:
+            cout << "ASSIGN_MUL";
             break;
         default:
             break;

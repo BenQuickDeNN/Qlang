@@ -39,7 +39,7 @@ public:
             }
             switch (state)
             {
-            // variable
+            // NAME
             case JumpState::CHECK_KEYWORD:
                 if (isKeyWord(tmp_str))
                     ret.emplace_back(Token(tmp_str, TokType::KEY_WORD));
@@ -51,7 +51,7 @@ public:
                                      CharType::CT_ASSIGN, CharType::CT_PARENTHESES_L, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_L,
                                      CharType::CT_BRACKET_R, CharType::CT_BRACE_L, CharType::CT_ANGLE_BRACKET_L, CharType::CT_ANGLE_BRACKET_R,
                                      CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
-                                     CharType::CT_ADD, CharType::CT_SUB))
+                                     CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL))
                     --idx;
                 break;
 
@@ -63,7 +63,7 @@ public:
                 if (checkBackForward(ct, CharType::CT_COMMA, CharType::CT_DOT, CharType::CT_SEMI,
                                      CharType::CT_PARENTHESES_R, CharType::CT_BRACE_R, CharType::CT_ANGLE_BRACKET_R,
                                      CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
-                                     CharType::CT_ADD, CharType::CT_SUB))
+                                     CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL))
                     --idx;
                 break;
             case JumpState::TOK_FLOAT_POINT:
@@ -73,7 +73,7 @@ public:
                 if (checkBackForward(ct, CharType::CT_COMMA, CharType::CT_DOT,
                                      CharType::CT_SEMI, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_R,
                                      CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
-                                     CharType::CT_ADD, CharType::CT_SUB))
+                                     CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL))
                     --idx;
                 break;
 
@@ -192,6 +192,14 @@ public:
                 if (checkBackForward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
                     --idx;
                 break;
+            case JumpState::TOK_MUL:
+                ret.emplace_back(Token(tmp_str, TokType::MUL));
+                tmp_str = "";
+                state = JumpState::START;
+                if (checkBackForward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                    --idx;
+                break;
+
             case JumpState::TOK_INCREASE:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::INCREASE));
@@ -204,6 +212,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 break;
+
             case JumpState::TOK_ASSIGN_ADD:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::ASSIGN_ADD));
@@ -213,6 +222,12 @@ public:
             case JumpState::TOK_ASSIGN_SUB:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::ASSIGN_SUB));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_ASSIGN_MUL:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::ASSIGN_MUL));
                 tmp_str = "";
                 state = JumpState::START;
                 break;
@@ -249,6 +264,9 @@ public:
                 tmp_str += c;
                 break;
             case JumpState::STATE8:
+                tmp_str += c;
+                break;
+            case JumpState::STATE9:
                 tmp_str += c;
                 break;
 

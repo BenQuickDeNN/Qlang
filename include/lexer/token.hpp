@@ -31,11 +31,13 @@ enum TokType
     MOVE_L,
     MOVE_R,
     ADD,
-    INCREASE,
     SUB,
+    MUL,
+    INCREASE,
     DECREASE,
     ASSIGN_ADD,
     ASSIGN_SUB,
+    ASSIGN_MUL
 };
 
 /**
@@ -68,7 +70,8 @@ enum CharType
     CT_ANGLE_BRACKET_R,
 
     CT_ADD,
-    CT_SUB
+    CT_SUB,
+    CT_MUL
 };
 
 static CharType getCharType(const char &c)
@@ -138,6 +141,9 @@ static CharType getCharType(const char &c)
             break;
         case '-':
             return CharType::CT_SUB;
+            break;
+        case '*':
+            return CharType::CT_MUL;
             break;
 
         case EOF:
