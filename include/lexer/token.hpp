@@ -33,11 +33,13 @@ enum TokType
     ADD,
     SUB,
     MUL,
+    DIV,
     INCREASE,
     DECREASE,
     ASSIGN_ADD,
     ASSIGN_SUB,
-    ASSIGN_MUL
+    ASSIGN_MUL,
+    ASSIGN_DIV
 };
 
 /**
@@ -71,7 +73,8 @@ enum CharType
 
     CT_ADD,
     CT_SUB,
-    CT_MUL
+    CT_MUL,
+    CT_DIV
 };
 
 static CharType getCharType(const char &c)
@@ -144,6 +147,9 @@ static CharType getCharType(const char &c)
             break;
         case '*':
             return CharType::CT_MUL;
+            break;
+        case '/':
+            return CharType::CT_DIV;
             break;
 
         case EOF:

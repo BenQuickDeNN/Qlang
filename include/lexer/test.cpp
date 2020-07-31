@@ -16,13 +16,14 @@ void test1()
     string testStr =
         "template<typname type> type func(type param_1, type param_2)\n\
     {\n\
-    int ret_val = param_1 << param_2 == param_1 >> param_2; return ret_val;  \n\
+    \tint ret_val = param_1 << param_2 == param_1 >> param_2; return ret_val;  \n\
     }\n\
     int a = 0;\n\
-    for (int i = 0; i < _size; i+=1)\n\
+    for (int i = 0; i < _size; i++)\n\
     {\n\
-    a = func<int, float>(2 + 1.54 * 6.0 - 4.568);\n\
-    a *= 2.4;\n\
+    \ta = func<int, float>(2 + 1.54 * 6.0 - 4.568);\n\
+    \ta *= 2.4;\n\
+    \ta /= 1.0 +2.35 / 20;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -96,6 +97,9 @@ void test1()
         case TokType::MUL:
             cout << "MUL";
             break;
+        case TokType::DIV:
+            cout << "DIV";
+            break;
         case TokType::INCREASE:
             cout << "INCREASE";
             break;
@@ -110,6 +114,9 @@ void test1()
             break;
         case TokType::ASSIGN_MUL:
             cout << "ASSIGN_MUL";
+            break;
+        case TokType::ASSIGN_DIV:
+            cout << "ASSIGN_DIV";
             break;
         default:
             break;
