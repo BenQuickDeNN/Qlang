@@ -20,6 +20,8 @@ enum JumpState
     STATE12, // 注释状态
     STATE13, // 注释状态
     STATE14, //注释状态
+    STATE15,
+    STATE16,
     NO_TOKEN,
     CHECK_KEYWORD,
     TOK_INTEGER,
@@ -43,12 +45,18 @@ enum JumpState
     TOK_SUB,
     TOK_MUL,
     TOK_DIV,
+    TOK_AND,
+    TOK_OR,
     TOK_INCREASE,
     TOK_DECREASE,
+    TOK_BOOL_AND,
+    TOK_BOOL_OR,
     TOK_ASSIGN_ADD,
     TOK_ASSIGN_SUB,
     TOK_ASSIGN_MUL,
     TOK_ASSIGN_DIV,
+    TOK_ASSIGN_AND,
+    TOK_ASSIGN_OR,
     TOK_LEQ,
     TOK_GEQ
 };
@@ -79,6 +87,8 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::CT_SUB}, JumpState::STATE8},
     {{JumpState::START, CharType::CT_MUL}, JumpState::STATE9},
     {{JumpState::START, CharType::CT_DIV}, JumpState::STATE10},
+    {{JumpState::START, CharType::CT_AND}, JumpState::STATE15},
+    {{JumpState::START, CharType::CT_OR}, JumpState::STATE16},
 
     {{JumpState::STATE1, CharType::ALPHA}, JumpState::STATE1},
     {{JumpState::STATE1, CharType::UNDERLINE}, JumpState::STATE1},
@@ -288,7 +298,25 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE14, CharType::CT_ADD}, JumpState::STATE13},
     {{JumpState::STATE14, CharType::CT_SUB}, JumpState::STATE13},
     {{JumpState::STATE14, CharType::CT_MUL}, JumpState::STATE13},
-    {{JumpState::STATE14, CharType::CT_DIV}, JumpState::STATE13}
+    {{JumpState::STATE14, CharType::CT_DIV}, JumpState::STATE13},
+
+    {{JumpState::STATE15, CharType::SPACE}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::ENTER}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::ALPHA}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::DIGIT}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::UNDERLINE}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::CT_PARENTHESES_L}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_AND},
+    {{JumpState::STATE15, CharType::CT_AND}, JumpState::TOK_BOOL_AND},
+
+    {{JumpState::STATE16, CharType::SPACE}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::ENTER}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::ALPHA}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::DIGIT}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::UNDERLINE}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::CT_PARENTHESES_L}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_OR},
+    {{JumpState::STATE16, CharType::CT_OR}, JumpState::TOK_BOOL_OR}
 
 };
 

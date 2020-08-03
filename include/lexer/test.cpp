@@ -17,20 +17,23 @@ void test1()
           * @author benquick\n\
           * @brief lexer\n\
         */\n\
-    template<typname type> type func(type param_1, type param_2)\n\
+    template<typname type> type func(type &param_1, type &param_2)\n\
     {\n\
     \tint ret_val = param_1 << param_2 == param_1 >> param_2;\n\
     \treturn ret_val; // return the value \n\
     }\n\
     int a = 0;\n\
     /* kernel */\n\
-    for (int i = 0; i <= _size; i++)\n\
+    for (int i = 0; i <= _size && i >=0 || i ==20; i++)\n\
     {\n\
-    \ta = func<int, float>(2 + 1.54 * 6.0 - 4.568);\n\
+    \ta = (int)func<float>(2 + 1.54 * 6.0 - 4.568, 1.25);\n\
     \ta *= 2.4;\n\
     \ta /= 1.0 +2.35 / 20;\n\
+    \ta &=100;\n\
     \tif (i >= 5)\n\
     \t\ta += 5.5;\n\
+    \ta |= 200;\n\
+    \ta = a | 500;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -107,11 +110,23 @@ void test1()
         case TokType::DIV:
             cout << "DIV";
             break;
+        case TokType::AND:
+            cout << "AND";
+            break;
+        case TokType::OR:
+            cout << "OR";
+            break;
         case TokType::INCREASE:
             cout << "INCREASE";
             break;
         case TokType::DECREASE:
             cout << "DECREASE";
+            break;
+        case TokType::BOOL_AND:
+            cout << "BOOL_AND";
+            break;
+        case TokType::BOOL_OR:
+            cout << "BOOL_OR";
             break;
         case TokType::ASSIGN_ADD:
             cout << "ASSIGN_ADD";
@@ -124,6 +139,12 @@ void test1()
             break;
         case TokType::ASSIGN_DIV:
             cout << "ASSIGN_DIV";
+            break;
+        case TokType::ASSIGN_AND:
+            cout << "ASSIGN_AND";
+            break;
+        case TokType::ASSIGN_OR:
+            cout << "ASSIGN_OR";
             break;
         case TokType::LEQ:
             cout << "LEQ";

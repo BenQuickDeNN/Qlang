@@ -1,5 +1,5 @@
 # Lexer
-# FM
+# FM（有限自动机）
 ```mermaid
 graph LR
     0(start) --alpha,underline--> 1;
@@ -21,6 +21,8 @@ graph LR
     0 --sub--> 8;
     0 --mul--> 9;
     0 --div--> 10;
+    0 --and--> 15;
+    0 --or--> 16;
 
     1 --alpha,underline,digit--> 1;
     1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div--> 1.1{is key word?};
@@ -74,4 +76,12 @@ graph LR
 
     14 --escapeChar--> 14;
     14 --other--> 13;
+
+    15 --space,enter,alpha,digit,underline,parentheses_l--> 15.1(AND);
+    15 --assign--> 15.2(ASSIGN_AND);
+    15 --and--> 15.3(BOOL_AND);
+
+    16 --space,enter,alpha,digit,underline,parentheses_l--> 16.1(OR);
+    16 --assign--> 16.2(ASSIGN_OR);
+    16 --or--> 16.3(BOOL_OR);
 ```

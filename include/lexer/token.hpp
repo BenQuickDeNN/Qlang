@@ -34,12 +34,18 @@ enum TokType
     SUB,
     MUL,
     DIV,
+    AND,
+    OR,
     INCREASE,
     DECREASE,
+    BOOL_AND,
+    BOOL_OR,
     ASSIGN_ADD,
     ASSIGN_SUB,
     ASSIGN_MUL,
     ASSIGN_DIV,
+    ASSIGN_AND,
+    ASSIGN_OR,
 
     LEQ,
     GEQ
@@ -78,7 +84,9 @@ enum CharType
     CT_ADD,
     CT_SUB,
     CT_MUL,
-    CT_DIV
+    CT_DIV,
+    CT_AND,
+    CT_OR
 };
 
 static CharType getCharType(const char &c)
@@ -161,6 +169,12 @@ static CharType getCharType(const char &c)
             break;
         case '/':
             return CharType::CT_DIV;
+            break;
+        case '&':
+            return CharType::CT_AND;
+            break;
+        case '|':
+            return CharType::CT_OR;
             break;
 
         case EOF:

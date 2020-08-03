@@ -223,6 +223,20 @@ public:
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
                     --idx;
                 break;
+            case JumpState::TOK_AND:
+                ret.emplace_back(Token(tmp_str, TokType::AND));
+                tmp_str = "";
+                state = JumpState::START;
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                    --idx;
+                break;
+            case JumpState::TOK_OR:
+                ret.emplace_back(Token(tmp_str, TokType::OR));
+                tmp_str = "";
+                state = JumpState::START;
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                    --idx;
+                break;
 
             case JumpState::TOK_INCREASE:
                 tmp_str += c;
@@ -233,6 +247,18 @@ public:
             case JumpState::TOK_DECREASE:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::DECREASE));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_BOOL_AND:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::BOOL_AND));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_BOOL_OR:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::BOOL_OR));
                 tmp_str = "";
                 state = JumpState::START;
                 break;
@@ -258,6 +284,18 @@ public:
             case JumpState::TOK_ASSIGN_DIV:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::ASSIGN_DIV));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_ASSIGN_AND:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::ASSIGN_AND));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_ASSIGN_OR:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::ASSIGN_OR));
                 tmp_str = "";
                 state = JumpState::START;
                 break;
@@ -326,6 +364,12 @@ public:
                 break;
             case JumpState::STATE14:
                 // do nothing
+                break;
+            case JumpState::STATE15:
+                tmp_str += c;
+                break;
+            case JumpState::STATE16:
+                tmp_str += c;
                 break;
 
             // no token
