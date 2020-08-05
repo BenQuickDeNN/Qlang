@@ -67,7 +67,8 @@ public:
                                   CharType::CT_ASSIGN, CharType::CT_PARENTHESES_L, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_L,
                                   CharType::CT_BRACKET_R, CharType::CT_BRACE_L, CharType::CT_ANGLE_BRACKET_L, CharType::CT_ANGLE_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
-                                  CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV))
+                                  CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
+                                  CharType::CT_AND, CharType::CT_OR))
                     --idx;
                 break;
 
@@ -79,7 +80,8 @@ public:
                 if (checkBackward(ct, CharType::CT_COMMA, CharType::CT_DOT, CharType::CT_SEMI,
                                   CharType::CT_PARENTHESES_R, CharType::CT_BRACE_R, CharType::CT_ANGLE_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
-                                  CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV))
+                                  CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
+                                  CharType::CT_AND, CharType::CT_OR))
                     --idx;
                 break;
             case JumpState::TOK_FLOAT_POINT:
@@ -89,7 +91,8 @@ public:
                 if (checkBackward(ct, CharType::CT_COMMA, CharType::CT_DOT,
                                   CharType::CT_SEMI, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
-                                  CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV))
+                                  CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
+                                  CharType::CT_AND, CharType::CT_OR))
                     --idx;
                 break;
 
@@ -125,7 +128,8 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::CT_PARENTHESES_L, CharType::ALPHA,
-                                  CharType::DIGIT, CharType::CT_BRACKET_L, CharType::SPACE, CharType::ENTER))
+                                  CharType::DIGIT, CharType::CT_BRACKET_L, CharType::SPACE, CharType::ENTER,
+                                  CharType::CT_NOT))
                     --idx;
                 break;
 
@@ -199,42 +203,56 @@ public:
                 ret.emplace_back(Token(tmp_str, TokType::ADD));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
                     --idx;
                 break;
             case JumpState::TOK_SUB:
                 ret.emplace_back(Token(tmp_str, TokType::SUB));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
                     --idx;
                 break;
             case JumpState::TOK_MUL:
                 ret.emplace_back(Token(tmp_str, TokType::MUL));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
                     --idx;
                 break;
             case JumpState::TOK_DIV:
                 ret.emplace_back(Token(tmp_str, TokType::DIV));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
                     --idx;
                 break;
             case JumpState::TOK_AND:
                 ret.emplace_back(Token(tmp_str, TokType::AND));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
                     --idx;
                 break;
             case JumpState::TOK_OR:
                 ret.emplace_back(Token(tmp_str, TokType::OR));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L))
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
+                    --idx;
+                break;
+            case JumpState::TOK_NOT:
+                ret.emplace_back(Token(tmp_str, TokType::NOT));
+                tmp_str = "";
+                state = JumpState::START;
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT))
                     --idx;
                 break;
 
@@ -296,6 +314,12 @@ public:
             case JumpState::TOK_ASSIGN_OR:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::ASSIGN_OR));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_ASSIGN_NOT:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::ASSIGN_NOT));
                 tmp_str = "";
                 state = JumpState::START;
                 break;
@@ -369,6 +393,9 @@ public:
                 tmp_str += c;
                 break;
             case JumpState::STATE16:
+                tmp_str += c;
+                break;
+            case JumpState::STATE17:
                 tmp_str += c;
                 break;
 

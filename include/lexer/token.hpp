@@ -36,6 +36,7 @@ enum TokType
     DIV,
     AND,
     OR,
+    NOT,
     INCREASE,
     DECREASE,
     BOOL_AND,
@@ -46,6 +47,7 @@ enum TokType
     ASSIGN_DIV,
     ASSIGN_AND,
     ASSIGN_OR,
+    ASSIGN_NOT,
 
     LEQ,
     GEQ
@@ -86,7 +88,8 @@ enum CharType
     CT_MUL,
     CT_DIV,
     CT_AND,
-    CT_OR
+    CT_OR,
+    CT_NOT
 };
 
 static CharType getCharType(const char &c)
@@ -176,6 +179,9 @@ static CharType getCharType(const char &c)
         case '|':
             return CharType::CT_OR;
             break;
+        case '~':
+            return CharType::CT_NOT;
+            break;
 
         case EOF:
             return CharType::CT_EOF;
@@ -193,10 +199,18 @@ class Token
 public:
     Token() {}
     Token(const std::string &tok_str, const TokType &tok_type) : tok_str(tok_str), tok_type(tok_type) {}
-    std::string getTokStr() const { return tok_str; }
-    void setTokStr(const std::string &tok_str) { this->tok_str = tok_str; }
-    TokType getTokType() const { return tok_type; }
-    void setTokType(const TokType &tok_type) { this->tok_type = tok_type; }
+    std::string getTokStr() const {
+        return tok_str;
+    }
+    void setTokStr(const std::string &tok_str) {
+        this->tok_str = tok_str;
+    }
+    TokType getTokType() const {
+        return tok_type;
+    }
+    void setTokType(const TokType &tok_type) {
+        this->tok_type = tok_type;
+    }
 
 private:
     std::string tok_str;

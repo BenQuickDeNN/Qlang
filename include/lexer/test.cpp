@@ -24,7 +24,7 @@ void test1()
     }\n\
     int a = 0;\n\
     /* kernel */\n\
-    for (int i = 0; i <= _size && i >=0 || i ==20; i++)\n\
+    for (int i = 0; i<=_size&&i>=0 || i ==20; i++)\n\
     {\n\
     \ta = (int)func<float>(2 + 1.54 * 6.0 - 4.568, 1.25);\n\
     \ta *= 2.4;\n\
@@ -34,6 +34,9 @@ void test1()
     \t\ta += 5.5;\n\
     \ta |= 200;\n\
     \ta = a | 500;\n\
+    \ta ~=1;\n\
+    \ta =~~~a;\n\
+    \ta=~a;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -116,6 +119,9 @@ void test1()
         case TokType::OR:
             cout << "OR";
             break;
+        case TokType::NOT:
+            cout << "NOT";
+            break;
         case TokType::INCREASE:
             cout << "INCREASE";
             break;
@@ -145,6 +151,9 @@ void test1()
             break;
         case TokType::ASSIGN_OR:
             cout << "ASSIGN_OR";
+            break;
+        case TokType::ASSIGN_NOT:
+            cout << "ASSIGN_NOT";
             break;
         case TokType::LEQ:
             cout << "LEQ";
