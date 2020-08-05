@@ -44,5 +44,6 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "map": "cpp"
-    }
+    },
+    "editor.formatOnSave": false
 }

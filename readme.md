@@ -23,22 +23,23 @@ graph LR
     0 --div--> 10;
     0 --and--> 15;
     0 --or--> 16;
+    0 --not--> 17;
 
     1 --alpha,underline,digit--> 1;
-    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div--> 1.1{is key word?};
+    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or--> 1.1{is key word?};
 
     2 --digit--> 2;
-    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div--> 2.1(INTEGER);
+    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or--> 2.1(INTEGER);
     2 --dot--> 3;
 
     1.1 --yes--> 1.1.1(KEY_WORD);
     1.1 --no--> 1.1.2(VARIABLE);
 
     3 --digit--> 3;
-    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div--> 3.1(FLOAT_POINT);
+    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or--> 3.1(FLOAT_POINT);
 
     4 --assign--> 4.1(EQUAL);
-    4 --space,enter,alpha,underline,digit,parentheses_l,bracket_l--> 4.2(ASSIGN);
+    4 --space,enter,alpha,underline,digit,parentheses_l,bracket_l,not--> 4.2(ASSIGN);
 
     5 --space,enter,alpha,underline,digit,parentheses_l--> 5.1(ANGLE_BRACKET_L);
     5 --angle_bracket_l--> 5.2(MOVE_L);
@@ -48,18 +49,18 @@ graph LR
     6 --angle_bracket_r--> 6.2(MOVE_R);
     6 --assign--> 6.3(GEQ);
 
-    7 --space,enter,alpha,digit,underline,parentheses_l--> 7.1(ADD);
+    7 --space,enter,alpha,digit,underline,parentheses_l,not--> 7.1(ADD);
     7 --add--> 7.2(INCREASE);
     7 --assign--> 7.3(ASSIGN_ADD);
 
-    8 --space,enter,alpha,digit,underline,parentheses_l--> 8.1(SUB);
+    8 --space,enter,alpha,digit,underline,parentheses_l,not--> 8.1(SUB);
     8 --sub--> 8.2(DECREASE);
     8 --assign--> 8.3(ASSIGN_SUB);
 
-    9 --space,enter,alpha,digit,underline,parentheses_l--> 9.1(MUL);
+    9 --space,enter,alpha,digit,underline,parentheses_l,not--> 9.1(MUL);
     9 --assign--> 9.2(ASSIGN_MUL);
 
-    10 --space,enter,alpha,digit,underline,parentheses_l--> 10.1(DIV);
+    10 --space,enter,alpha,digit,underline,parentheses_l,not--> 10.1(DIV);
     10 --assign--> 10.2(ASSIGN_DIV);
     10 --mul--> 11;
     10 --div--> 13;
@@ -77,11 +78,14 @@ graph LR
     14 --escapeChar--> 14;
     14 --other--> 13;
 
-    15 --space,enter,alpha,digit,underline,parentheses_l--> 15.1(AND);
+    15 --space,enter,alpha,digit,underline,parentheses_l,not--> 15.1(AND);
     15 --assign--> 15.2(ASSIGN_AND);
     15 --and--> 15.3(BOOL_AND);
 
-    16 --space,enter,alpha,digit,underline,parentheses_l--> 16.1(OR);
+    16 --space,enter,alpha,digit,underline,parentheses_l,not--> 16.1(OR);
     16 --assign--> 16.2(ASSIGN_OR);
     16 --or--> 16.3(BOOL_OR);
+
+    17 --space,enter,alpha,digit,underline,parentheses_l,not--> 17.1(NOT);
+    17 --assign--> 17.2(ASSIGN_NOT);
 ```
