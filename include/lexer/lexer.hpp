@@ -111,6 +111,15 @@ public:
                 ret.emplace_back(Token(tmp_str, TokType::TT_DOT));
                 tmp_str = "";
                 state = JumpState::START;
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER,
+                                CharType::ALPHA, CharType::UNDERLINE))
+                    --idx;
+                break;
+            case JumpState::TOK_DOT3:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::TT_DOT3));
+                tmp_str = "";
+                state = JumpState::START;
                 break;
             case JumpState::TOK_SEMI:
                 tmp_str = c;
@@ -474,6 +483,12 @@ public:
                 tmp_str += c;
                 break;
             case JumpState::STATE21:
+                tmp_str += c;
+                break;
+            case JumpState::STATE22:
+                tmp_str += c;
+                break;
+            case JumpState::STATE23:
                 tmp_str += c;
                 break;
 

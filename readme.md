@@ -6,7 +6,6 @@ graph LR
     0 --digit--> 2;
     0 --space,enter,eof--> 0.1(no token);
     0 --comma--> 0.2(COMMA);
-    0 --dot--> 0.3(DOT);
     0 --semi--> 0.4(SEMI);
     0 --assign--> 4;
     0 --parentheses_l--> 0.5(PARENTHESES_L);
@@ -28,6 +27,7 @@ graph LR
     0 --mod--> 19;
     0 --xor--> 20;
     0 --colon--> 21;
+    0 --dot--> 22;
 
     1 --alpha,underline,digit--> 1;
     1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 1.1{is key word?};
@@ -105,4 +105,9 @@ graph LR
 
     21 --space,enter,alpha,digit,underline,parentheses_l,not,bool_not--> 21.1(COLON);
     21 --colon--> 21.2(COLON2);
+
+    22 --space,enter,alpha,underline--> 22.1(DOT);
+    22 --dot--> 23;
+    
+    23 --dot--> 23.1(DOT3);
 ```

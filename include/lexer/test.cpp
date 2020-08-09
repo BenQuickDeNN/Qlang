@@ -17,7 +17,7 @@ void test1()
           * @author benquick\n\
           * @brief lexer\n\
         */\n\
-    template<typname type> type func(type &param_1, type &param_2)\n\
+    template<typname type, typname... types> type func(type &param_1, type &param_2)\n\
     {\n\
     \tint ret_val = param_1 << param_2 == param_1 >> param_2;\n\
     \treturn ret_val; // return the value \n\
@@ -41,6 +41,7 @@ void test1()
     \tauto *p=&a;\n\
     \ta*=p->size();\n\
     \ta^=p->value()^124;\n\
+    \ta+=a.size();\n\
     \tswitch(a)\n\
     \t{\n\
     \t\tdefault:a::key++;\n\
@@ -69,6 +70,9 @@ void test1()
             break;
         case TokType::TT_DOT:
             cout << "DOT";
+            break;
+        case TokType::TT_DOT3:
+            cout << "DOT3";
             break;
         case TokType::TT_SEMI:
             cout << "SEMI";

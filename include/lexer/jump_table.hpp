@@ -27,12 +27,15 @@ enum JumpState
     STATE19,
     STATE20,
     STATE21,
+    STATE22,
+    STATE23,
     NO_TOKEN,
     CHECK_KEYWORD,
     TOK_INTEGER,
     TOK_FLOAT_POINT,
     TOK_COMMA,
     TOK_DOT,
+    TOK_DOT3,
     TOK_SEMI,
     TOK_EQUAL,
     TOK_NOT_EQUAL,
@@ -88,7 +91,6 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::CT_EOF}, JumpState::NO_TOKEN},
     {{JumpState::START, CharType::ENTER}, JumpState::NO_TOKEN},
     {{JumpState::START, CharType::CT_COMMA}, JumpState::TOK_COMMA},
-    {{JumpState::START, CharType::CT_DOT}, JumpState::TOK_DOT},
     {{JumpState::START, CharType::CT_SEMI}, JumpState::TOK_SEMI},
     {{JumpState::START, CharType::CT_ASSIGN}, JumpState::STATE4},
     {{JumpState::START, CharType::CT_PARENTHESES_L}, JumpState::TOK_PARENTHESES_L},
@@ -110,6 +112,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::CT_MOD}, JumpState::STATE19},
     {{JumpState::START, CharType::CT_XOR}, JumpState::STATE20},
     {{JumpState::START, CharType::CT_COLON}, JumpState::STATE21},
+    {{JumpState::START, CharType::CT_DOT}, JumpState::STATE22},
 
     {{JumpState::STATE1, CharType::ALPHA}, JumpState::STATE1},
     {{JumpState::STATE1, CharType::UNDERLINE}, JumpState::STATE1},
@@ -421,7 +424,15 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE21, CharType::CT_PARENTHESES_L}, JumpState::TOK_COLON},
     {{JumpState::STATE21, CharType::CT_NOT}, JumpState::TOK_COLON},
     {{JumpState::STATE21, CharType::CT_BOOL_NOT}, JumpState::TOK_COLON},
-    {{JumpState::STATE21, CharType::CT_COLON}, JumpState::TOK_COLON2}
+    {{JumpState::STATE21, CharType::CT_COLON}, JumpState::TOK_COLON2},
+
+    {{JumpState::STATE22, CharType::SPACE}, JumpState::TOK_DOT},
+    {{JumpState::STATE22, CharType::ENTER}, JumpState::TOK_DOT},
+    {{JumpState::STATE22, CharType::ALPHA}, JumpState::TOK_DOT},
+    {{JumpState::STATE22, CharType::UNDERLINE}, JumpState::TOK_DOT},
+    {{JumpState::STATE22, CharType::CT_DOT}, JumpState::STATE23},
+
+    {{JumpState::STATE23, CharType::CT_DOT}, JumpState::TOK_DOT3}
 
 };
 

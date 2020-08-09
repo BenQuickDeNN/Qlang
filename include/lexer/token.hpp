@@ -16,6 +16,7 @@ enum TokType
 
     TT_COMMA,
     TT_DOT,
+    TT_DOT3,
     TT_SEMI,
     TT_ASSIGN,
     TT_EQUAL,
