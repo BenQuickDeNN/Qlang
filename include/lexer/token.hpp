@@ -54,7 +54,9 @@ enum TokType
     ASSIGN_MOD,
 
     LEQ,
-    GEQ
+    GEQ,
+
+    POINT_TO
 };
 
 /**

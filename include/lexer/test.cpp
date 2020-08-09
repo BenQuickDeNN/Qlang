@@ -38,6 +38,8 @@ void test1()
     \ta =~~~a;\n\
     \ta=~a;\n\
     \ta%= a%124;\n\
+    \tauto *p=&a;\n\
+    \ta*=p->size();\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -173,6 +175,9 @@ void test1()
             break;
         case TokType::GEQ:
             cout << "GEQ";
+            break;
+        case TokType::POINT_TO:
+            cout << "POINT_TO";
             break;
         default:
             break;

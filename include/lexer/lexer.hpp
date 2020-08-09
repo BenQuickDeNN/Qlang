@@ -135,7 +135,7 @@ public:
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::CT_PARENTHESES_L, CharType::ALPHA,
                                   CharType::DIGIT, CharType::CT_BRACKET_L, CharType::SPACE, CharType::ENTER,
-                                  CharType::CT_NOT))
+                                  CharType::CT_NOT, CharType::CT_BOOL_NOT, CharType::CT_AND))
                     --idx;
                 break;
 
@@ -361,6 +361,13 @@ public:
             case JumpState::TOK_GEQ:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::GEQ));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+
+            case JumpState::TOK_POINT_TO:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::POINT_TO));
                 tmp_str = "";
                 state = JumpState::START;
                 break;
