@@ -68,7 +68,8 @@ public:
                                   CharType::CT_BRACKET_R, CharType::CT_BRACE_L, CharType::CT_ANGLE_BRACKET_L, CharType::CT_ANGLE_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
-                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR))
+                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
+                                  CharType::CT_COLON))
                     --idx;
                 break;
 
@@ -81,7 +82,8 @@ public:
                                   CharType::CT_PARENTHESES_R, CharType::CT_BRACE_R, CharType::CT_ANGLE_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
-                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR))
+                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
+                                  CharType::CT_COLON))
                     --idx;
                 break;
             case JumpState::TOK_FLOAT_POINT:
@@ -92,7 +94,8 @@ public:
                                   CharType::CT_SEMI, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
-                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR))
+                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
+                                  CharType::CT_COLON))
                     --idx;
                 break;
 
@@ -285,6 +288,20 @@ public:
                             CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
+            case JumpState::TOK_COLON:
+                ret.emplace_back(Token(tmp_str, TokType::COLON));
+                tmp_str = "";
+                state = JumpState::START;
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
+                    --idx;
+                break;
+            case JumpState::TOK_COLON2:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::COLON2));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
 
             case JumpState::TOK_INCREASE:
                 tmp_str += c;
@@ -454,6 +471,9 @@ public:
                 tmp_str += c;
                 break;
             case JumpState::STATE20:
+                tmp_str += c;
+                break;
+            case JumpState::STATE21:
                 tmp_str += c;
                 break;
 

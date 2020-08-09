@@ -41,6 +41,10 @@ void test1()
     \tauto *p=&a;\n\
     \ta*=p->size();\n\
     \ta^=p->value()^124;\n\
+    \tswitch(a)\n\
+    \t{\n\
+    \t\tdefault:a::key++;\n\
+    \t}\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -101,6 +105,12 @@ void test1()
             break;
         case TokType::TT_ANGLE_BRACKET_R:
             cout << "ANGLE_BRACKET_R";
+            break;
+        case TokType::COLON:
+            cout << "COLON";
+            break;
+        case TokType::COLON2:
+            cout << "COLON2";
             break;
         case TokType::MOVE_L:
             cout << "MOVE_L";

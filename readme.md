@@ -27,19 +27,20 @@ graph LR
     0 --bool_not--> 18;
     0 --mod--> 19;
     0 --xor--> 20;
+    0 --colon--> 21;
 
     1 --alpha,underline,digit--> 1;
-    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor--> 1.1{is key word?};
+    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 1.1{is key word?};
 
     2 --digit--> 2;
-    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor--> 2.1(INTEGER);
+    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 2.1(INTEGER);
     2 --dot--> 3;
 
     1.1 --yes--> 1.1.1(KEY_WORD);
     1.1 --no--> 1.1.2(VARIABLE);
 
     3 --digit--> 3;
-    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor--> 3.1(FLOAT_POINT);
+    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 3.1(FLOAT_POINT);
 
     4 --assign--> 4.1(EQUAL);
     4 --space,enter,alpha,underline,digit,parentheses_l,bracket_l,not,bool_not,and--> 4.2(ASSIGN);
@@ -101,4 +102,7 @@ graph LR
 
     20 --space,enter,alpha,digit,underline,parentheses_l,not,bool_not--> 20.1(XOR);
     20 --assign--> 16.2(ASSIGN_XOR);
+
+    21 --space,enter,alpha,digit,underline,parentheses_l,not,bool_not--> 21.1(COLON);
+    21 --colon--> 21.2(COLON2);
 ```

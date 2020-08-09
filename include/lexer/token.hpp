@@ -28,6 +28,8 @@ enum TokType
     TT_BRACE_R,
     TT_ANGLE_BRACKET_L,
     TT_ANGLE_BRACKET_R,
+    COLON,
+    COLON2,
 
     MOVE_L,
     MOVE_R,
@@ -90,6 +92,7 @@ enum CharType
     CT_BRACE_R,
     CT_ANGLE_BRACKET_L,
     CT_ANGLE_BRACKET_R,
+    CT_COLON,
 
     CT_ADD,
     CT_SUB,
@@ -166,6 +169,9 @@ static CharType getCharType(const char &c)
             break;
         case '>':
             return CharType::CT_ANGLE_BRACKET_R;
+            break;
+        case ':':
+            return CharType::CT_COLON;
             break;
 
         case '_':
