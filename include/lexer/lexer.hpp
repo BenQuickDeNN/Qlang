@@ -68,7 +68,7 @@ public:
                                   CharType::CT_BRACKET_R, CharType::CT_BRACE_L, CharType::CT_ANGLE_BRACKET_L, CharType::CT_ANGLE_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
-                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD))
+                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
 
@@ -81,7 +81,7 @@ public:
                                   CharType::CT_PARENTHESES_R, CharType::CT_BRACE_R, CharType::CT_ANGLE_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
-                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD))
+                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_FLOAT_POINT:
@@ -92,7 +92,7 @@ public:
                                   CharType::CT_SEMI, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
-                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD))
+                                  CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
 

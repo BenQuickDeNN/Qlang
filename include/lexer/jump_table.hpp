@@ -126,6 +126,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE1, CharType::CT_AND}, JumpState::CHECK_KEYWORD},
     {{JumpState::STATE1, CharType::CT_OR}, JumpState::CHECK_KEYWORD},
     {{JumpState::STATE1, CharType::CT_MOD}, JumpState::CHECK_KEYWORD},
+    {{JumpState::STATE1, CharType::CT_BOOL_NOT}, JumpState::CHECK_KEYWORD},
 
     {{JumpState::STATE2, CharType::DIGIT}, JumpState::STATE2},
     {{JumpState::STATE2, CharType::SPACE}, JumpState::TOK_INTEGER},
@@ -143,6 +144,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE2, CharType::CT_AND}, JumpState::TOK_INTEGER},
     {{JumpState::STATE2, CharType::CT_OR}, JumpState::TOK_INTEGER},
     {{JumpState::STATE2, CharType::CT_MOD}, JumpState::TOK_INTEGER},
+    {{JumpState::STATE2, CharType::CT_BOOL_NOT}, JumpState::TOK_INTEGER},
     {{JumpState::STATE2, CharType::CT_DOT}, JumpState::STATE3},
 
     {{JumpState::STATE3, CharType::DIGIT}, JumpState::STATE3},
@@ -159,6 +161,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE3, CharType::CT_AND}, JumpState::TOK_FLOAT_POINT},
     {{JumpState::STATE3, CharType::CT_OR}, JumpState::TOK_FLOAT_POINT},
     {{JumpState::STATE3, CharType::CT_MOD}, JumpState::TOK_FLOAT_POINT},
+    {{JumpState::STATE3, CharType::CT_BOOL_NOT}, JumpState::TOK_FLOAT_POINT},
 
     {{JumpState::STATE4, CharType::CT_ASSIGN}, JumpState::TOK_EQUAL},
     {{JumpState::STATE4, CharType::SPACE}, JumpState::TOK_ASSIGN},

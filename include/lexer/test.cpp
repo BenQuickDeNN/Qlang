@@ -24,7 +24,7 @@ void test1()
     }\n\
     int a = 0;\n\
     /* kernel */\n\
-    for (int i = 0; i<=_size&&i>=0 || !(i !=20); i++)\n\
+    for (int i = 0; i<=_size&&i>=0 || !(i!=20); i++)\n\
     {\n\
     \ta = (int)func<float>(2 + 1.54 * 6.0 - 4.568, 1.25);\n\
     \ta *= 2.4;\n\

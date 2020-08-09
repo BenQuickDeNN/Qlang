@@ -28,17 +28,17 @@ graph LR
     0 --mod--> 19;
 
     1 --alpha,underline,digit--> 1;
-    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod--> 1.1{is key word?};
+    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not--> 1.1{is key word?};
 
     2 --digit--> 2;
-    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or,mod--> 2.1(INTEGER);
+    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not--> 2.1(INTEGER);
     2 --dot--> 3;
 
     1.1 --yes--> 1.1.1(KEY_WORD);
     1.1 --no--> 1.1.2(VARIABLE);
 
     3 --digit--> 3;
-    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod--> 3.1(FLOAT_POINT);
+    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod,bool_not--> 3.1(FLOAT_POINT);
 
     4 --assign--> 4.1(EQUAL);
     4 --space,enter,alpha,underline,digit,parentheses_l,bracket_l,not,bool_not--> 4.2(ASSIGN);
