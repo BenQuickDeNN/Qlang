@@ -37,6 +37,7 @@ void test1()
     \ta ~=1;\n\
     \ta =~~~a;\n\
     \ta=~a;\n\
+    \ta%= a%124;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -125,6 +126,9 @@ void test1()
         case TokType::NOT:
             cout << "NOT";
             break;
+        case TokType::MOD:
+            cout << "MOD";
+            break;
         case TokType::BOOL_NOT:
             cout << "BOOL_NOT";
             break;
@@ -160,6 +164,9 @@ void test1()
             break;
         case TokType::ASSIGN_NOT:
             cout << "ASSIGN_NOT";
+            break;
+        case TokType::ASSIGN_MOD:
+            cout << "ASSIGN_MOD";
             break;
         case TokType::LEQ:
             cout << "LEQ";
