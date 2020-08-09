@@ -39,6 +39,7 @@ enum TokType
     OR,
     NOT,
     MOD,
+    XOR,
     INCREASE,
     DECREASE,
     BOOL_AND,
@@ -52,6 +53,7 @@ enum TokType
     ASSIGN_OR,
     ASSIGN_NOT,
     ASSIGN_MOD,
+    ASSIGN_XOR,
 
     LEQ,
     GEQ,
@@ -97,6 +99,7 @@ enum CharType
     CT_OR,
     CT_NOT,
     CT_MOD,
+    CT_XOR,
     CT_BOOL_NOT
 };
 
@@ -189,6 +192,9 @@ static CharType getCharType(const char &c)
             break;
         case '~':
             return CharType::CT_NOT;
+            break;
+        case '^':
+            return CharType::CT_XOR;
             break;
         case '!':
             return CharType::CT_BOOL_NOT;

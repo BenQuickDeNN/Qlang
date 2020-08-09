@@ -40,6 +40,7 @@ void test1()
     \ta%= a%124;\n\
     \tauto *p=&a;\n\
     \ta*=p->size();\n\
+    \ta^=p->value()^124;\n\
     }";
     vector<Token> tokens = Lexer::lexStr(testStr);
     for (const Token &t : tokens)
@@ -131,6 +132,9 @@ void test1()
         case TokType::MOD:
             cout << "MOD";
             break;
+        case TokType::XOR:
+            cout << "XOR";
+            break;
         case TokType::BOOL_NOT:
             cout << "BOOL_NOT";
             break;
@@ -169,6 +173,9 @@ void test1()
             break;
         case TokType::ASSIGN_MOD:
             cout << "ASSIGN_MOD";
+            break;
+        case TokType::ASSIGN_XOR:
+            cout << "ASSIGN_XOR";
             break;
         case TokType::LEQ:
             cout << "LEQ";
