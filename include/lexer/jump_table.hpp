@@ -23,6 +23,7 @@ enum JumpState
     STATE15,
     STATE16,
     STATE17,
+    STATE18,
     NO_TOKEN,
     CHECK_KEYWORD,
     TOK_INTEGER,
@@ -31,6 +32,7 @@ enum JumpState
     TOK_DOT,
     TOK_SEMI,
     TOK_EQUAL,
+    TOK_NOT_EQUAL,
     TOK_ASSIGN,
     TOK_PARENTHESES_L,
     TOK_PARENTHESES_R,
@@ -53,6 +55,7 @@ enum JumpState
     TOK_DECREASE,
     TOK_BOOL_AND,
     TOK_BOOL_OR,
+    TOK_BOOL_NOT,
     TOK_ASSIGN_ADD,
     TOK_ASSIGN_SUB,
     TOK_ASSIGN_MUL,
@@ -93,6 +96,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::CT_AND}, JumpState::STATE15},
     {{JumpState::START, CharType::CT_OR}, JumpState::STATE16},
     {{JumpState::START, CharType::CT_NOT}, JumpState::STATE17},
+    {{JumpState::START, CharType::CT_BOOL_NOT}, JumpState::STATE18},
 
     {{JumpState::STATE1, CharType::ALPHA}, JumpState::STATE1},
     {{JumpState::STATE1, CharType::UNDERLINE}, JumpState::STATE1},
@@ -158,6 +162,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE4, CharType::CT_PARENTHESES_L}, JumpState::TOK_ASSIGN},
     {{JumpState::STATE4, CharType::CT_BRACKET_L}, JumpState::TOK_ASSIGN},
     {{JumpState::STATE4, CharType::CT_NOT}, JumpState::TOK_ASSIGN},
+    {{JumpState::STATE4, CharType::CT_BOOL_NOT}, JumpState::TOK_ASSIGN},
 
     {{JumpState::STATE5, CharType::SPACE}, JumpState::TOK_ANGLE_BRACKET_L},
     {{JumpState::STATE5, CharType::ENTER}, JumpState::TOK_ANGLE_BRACKET_L},
@@ -184,6 +189,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE7, CharType::UNDERLINE}, JumpState::TOK_ADD},
     {{JumpState::STATE7, CharType::CT_PARENTHESES_L}, JumpState::TOK_ADD},
     {{JumpState::STATE7, CharType::CT_NOT}, JumpState::TOK_ADD},
+    {{JumpState::STATE7, CharType::CT_BOOL_NOT}, JumpState::TOK_ADD},
     {{JumpState::STATE7, CharType::CT_ADD}, JumpState::TOK_INCREASE},
     {{JumpState::STATE7, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_ADD},
 
@@ -194,6 +200,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE8, CharType::UNDERLINE}, JumpState::TOK_SUB},
     {{JumpState::STATE8, CharType::CT_PARENTHESES_L}, JumpState::TOK_SUB},
     {{JumpState::STATE8, CharType::CT_NOT}, JumpState::TOK_SUB},
+    {{JumpState::STATE8, CharType::CT_BOOL_NOT}, JumpState::TOK_SUB},
     {{JumpState::STATE8, CharType::CT_SUB}, JumpState::TOK_DECREASE},
     {{JumpState::STATE8, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_SUB},
 
@@ -204,6 +211,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE9, CharType::UNDERLINE}, JumpState::TOK_MUL},
     {{JumpState::STATE9, CharType::CT_PARENTHESES_L}, JumpState::TOK_MUL},
     {{JumpState::STATE9, CharType::CT_NOT}, JumpState::TOK_MUL},
+    {{JumpState::STATE9, CharType::CT_BOOL_NOT}, JumpState::TOK_MUL},
     {{JumpState::STATE9, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_MUL},
 
     {{JumpState::STATE10, CharType::SPACE}, JumpState::TOK_DIV},
@@ -213,6 +221,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE10, CharType::UNDERLINE}, JumpState::TOK_DIV},
     {{JumpState::STATE10, CharType::CT_PARENTHESES_L}, JumpState::TOK_DIV},
     {{JumpState::STATE10, CharType::CT_NOT}, JumpState::TOK_DIV},
+    {{JumpState::STATE10, CharType::CT_BOOL_NOT}, JumpState::TOK_DIV},
     {{JumpState::STATE10, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_DIV},
     {{JumpState::STATE10, CharType::CT_MUL}, JumpState::STATE11},
     {{JumpState::STATE10, CharType::CT_DIV}, JumpState::STATE13},
@@ -322,6 +331,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE15, CharType::UNDERLINE}, JumpState::TOK_AND},
     {{JumpState::STATE15, CharType::CT_PARENTHESES_L}, JumpState::TOK_AND},
     {{JumpState::STATE15, CharType::CT_NOT}, JumpState::TOK_AND},
+    {{JumpState::STATE15, CharType::CT_BOOL_NOT}, JumpState::TOK_AND},
     {{JumpState::STATE15, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_AND},
     {{JumpState::STATE15, CharType::CT_AND}, JumpState::TOK_BOOL_AND},
 
@@ -332,6 +342,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE16, CharType::UNDERLINE}, JumpState::TOK_OR},
     {{JumpState::STATE16, CharType::CT_PARENTHESES_L}, JumpState::TOK_OR},
     {{JumpState::STATE16, CharType::CT_NOT}, JumpState::TOK_OR},
+    {{JumpState::STATE16, CharType::CT_BOOL_NOT}, JumpState::TOK_OR},
     {{JumpState::STATE16, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_OR},
     {{JumpState::STATE16, CharType::CT_OR}, JumpState::TOK_BOOL_OR},
 
@@ -342,7 +353,18 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE17, CharType::UNDERLINE}, JumpState::TOK_NOT},
     {{JumpState::STATE17, CharType::CT_PARENTHESES_L}, JumpState::TOK_NOT},
     {{JumpState::STATE17, CharType::CT_NOT}, JumpState::TOK_NOT},
-    {{JumpState::STATE17, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_NOT}
+    {{JumpState::STATE17, CharType::CT_BOOL_NOT}, JumpState::TOK_NOT},
+    {{JumpState::STATE17, CharType::CT_ASSIGN}, JumpState::TOK_ASSIGN_NOT},
+
+    {{JumpState::STATE18, CharType::SPACE}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::ENTER}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::ALPHA}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::DIGIT}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::UNDERLINE}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::CT_PARENTHESES_L}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::CT_NOT}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::CT_BOOL_NOT}, JumpState::TOK_BOOL_NOT},
+    {{JumpState::STATE18, CharType::CT_ASSIGN}, JumpState::TOK_NOT_EQUAL}
 
 };
 

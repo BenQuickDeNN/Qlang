@@ -123,6 +123,12 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 break;
+            case JumpState::TOK_NOT_EQUAL:
+                tmp_str += c;
+                ret.emplace_back(Token(tmp_str, TokType::TT_NOT_EQUAL));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
             case JumpState::TOK_ASSIGN:
                 ret.emplace_back(Token(tmp_str, TokType::TT_ASSIGN));
                 tmp_str = "";
@@ -204,7 +210,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_SUB:
@@ -212,7 +218,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_MUL:
@@ -220,7 +226,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_DIV:
@@ -228,7 +234,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_AND:
@@ -236,7 +242,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_OR:
@@ -244,7 +250,7 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
             case JumpState::TOK_NOT:
@@ -252,7 +258,15 @@ public:
                 tmp_str = "";
                 state = JumpState::START;
                 if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
-                            CharType::CT_NOT))
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
+                    --idx;
+                break;
+            case JumpState::TOK_BOOL_NOT:
+                ret.emplace_back(Token(tmp_str, TokType::BOOL_NOT));
+                tmp_str = "";
+                state = JumpState::START;
+                if (checkBackward(ct, CharType::SPACE, CharType::ENTER, CharType::ALPHA, CharType::DIGIT, CharType::UNDERLINE, CharType::CT_PARENTHESES_L,
+                            CharType::CT_NOT, CharType::CT_BOOL_NOT))
                     --idx;
                 break;
 
@@ -396,6 +410,9 @@ public:
                 tmp_str += c;
                 break;
             case JumpState::STATE17:
+                tmp_str += c;
+                break;
+            case JumpState::STATE18:
                 tmp_str += c;
                 break;
 

@@ -19,6 +19,7 @@ enum TokType
     TT_SEMI,
     TT_ASSIGN,
     TT_EQUAL,
+    TT_NOT_EQUAL,
     TT_PARENTHESES_L,
     TT_PARENTHESES_R,
     TT_BRACKET_L,
@@ -41,6 +42,7 @@ enum TokType
     DECREASE,
     BOOL_AND,
     BOOL_OR,
+    BOOL_NOT,
     ASSIGN_ADD,
     ASSIGN_SUB,
     ASSIGN_MUL,
@@ -89,7 +91,8 @@ enum CharType
     CT_DIV,
     CT_AND,
     CT_OR,
-    CT_NOT
+    CT_NOT,
+    CT_BOOL_NOT
 };
 
 static CharType getCharType(const char &c)
@@ -181,6 +184,9 @@ static CharType getCharType(const char &c)
             break;
         case '~':
             return CharType::CT_NOT;
+            break;
+        case '!':
+            return CharType::CT_BOOL_NOT;
             break;
 
         case EOF:

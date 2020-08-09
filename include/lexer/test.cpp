@@ -24,7 +24,7 @@ void test1()
     }\n\
     int a = 0;\n\
     /* kernel */\n\
-    for (int i = 0; i<=_size&&i>=0 || i ==20; i++)\n\
+    for (int i = 0; i<=_size&&i>=0 || !(i !=20); i++)\n\
     {\n\
     \ta = (int)func<float>(2 + 1.54 * 6.0 - 4.568, 1.25);\n\
     \ta *= 2.4;\n\
@@ -70,6 +70,9 @@ void test1()
             break;
         case TokType::TT_EQUAL:
             cout << "EQUAL";
+            break;
+        case TokType::TT_NOT_EQUAL:
+            cout << "NOT_EQUAL";
             break;
         case TokType::TT_PARENTHESES_L:
             cout << "PARENTHESES_L";
@@ -121,6 +124,9 @@ void test1()
             break;
         case TokType::NOT:
             cout << "NOT";
+            break;
+        case TokType::BOOL_NOT:
+            cout << "BOOL_NOT";
             break;
         case TokType::INCREASE:
             cout << "INCREASE";
