@@ -2,7 +2,7 @@
 # FM（有限自动机）
 ```mermaid
 graph LR
-    0(start) --alpha,underline--> 1;
+    0(start) --alpha,underline,pound--> 1;
     0 --digit--> 2;
     0 --space,enter,eof--> 0.1(no token);
     0 --comma--> 0.2(COMMA);

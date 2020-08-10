@@ -86,6 +86,7 @@ enum JumpState
 static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::ALPHA}, JumpState::STATE1},
     {{JumpState::START, CharType::UNDERLINE}, JumpState::STATE1},
+    {{JumpState::START, CharType::CT_POUND}, JumpState::STATE1},
     {{JumpState::START, CharType::DIGIT}, JumpState::STATE2},
     {{JumpState::START, CharType::SPACE}, JumpState::NO_TOKEN},
     {{JumpState::START, CharType::CT_EOF}, JumpState::NO_TOKEN},

@@ -104,7 +104,9 @@ enum CharType
     CT_NOT,
     CT_MOD,
     CT_XOR,
-    CT_BOOL_NOT
+    CT_BOOL_NOT,
+
+    CT_POUND
 };
 
 static CharType getCharType(const char &c)
@@ -208,6 +210,10 @@ static CharType getCharType(const char &c)
             break;
         case '%':
             return CharType::CT_MOD;
+            break;
+
+        case '#':
+            return CharType::CT_POUND;
             break;
 
         case EOF:

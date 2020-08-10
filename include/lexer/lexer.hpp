@@ -28,7 +28,7 @@ public:
         while (idx < str.size())
         {
             c = str[idx];
-            // std::cout << "get '" << c << "', ascii=" << (int)c << std::endl;
+            // std::cout << "idx = " << idx << ' '<< "get '" << c << "', ascii=" << (int)c << std::endl;
             ct = getCharType(c);
             last_state = state;
             if (JUMP_TABLE.find({state, ct}) != JUMP_TABLE.end())
@@ -78,8 +78,8 @@ public:
                 ret.emplace_back(Token(tmp_str, TokType::INTEGER));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::CT_COMMA, CharType::CT_DOT, CharType::CT_SEMI,
-                                  CharType::CT_PARENTHESES_R, CharType::CT_BRACE_R, CharType::CT_ANGLE_BRACKET_R,
+                if (checkBackward(ct, CharType::CT_COMMA, CharType::CT_SEMI,
+                                  CharType::CT_PARENTHESES_R, CharType::CT_BRACE_R, CharType::CT_ANGLE_BRACKET_R, CharType::CT_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
                                   CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
@@ -90,7 +90,7 @@ public:
                 ret.emplace_back(Token(tmp_str, TokType::FLOAT_POINT));
                 tmp_str = "";
                 state = JumpState::START;
-                if (checkBackward(ct, CharType::CT_COMMA, CharType::CT_DOT,
+                if (checkBackward(ct, CharType::CT_COMMA,
                                   CharType::CT_SEMI, CharType::CT_PARENTHESES_R, CharType::CT_BRACKET_R,
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
@@ -107,7 +107,7 @@ public:
                 state = JumpState::START;
                 break;
             case JumpState::TOK_DOT:
-                tmp_str = c;
+                // tmp_str = c;
                 ret.emplace_back(Token(tmp_str, TokType::TT_DOT));
                 tmp_str = "";
                 state = JumpState::START;

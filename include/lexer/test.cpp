@@ -2,6 +2,7 @@
 #include <iostream>
 #include "lexer.hpp"
 #include "token.hpp"
+#include "../file/file.hpp"
 using namespace std;
 void test1();
 void test2();
@@ -17,6 +18,8 @@ void test1()
           * @author benquick\n\
           * @brief lexer\n\
         */\n\
+    #define K 1000\n\
+    #include <cstdio>\n\
     template<typname type, typname... types> type func(type &param_1, type &param_2)\n\
     {\n\
     \tint ret_val = param_1 << param_2 == param_1 >> param_2;\n\
@@ -47,7 +50,8 @@ void test1()
     \t\tdefault:a::key++;\n\
     \t}\n\
     }";
-    vector<Token> tokens = Lexer::lexStr(testStr);
+    string testStr2 = readStrFromFile("examples/for_loop.cpp");
+    vector<Token> tokens = Lexer::lexStr(testStr2);
     for (const Token &t : tokens)
     {
         cout << t.getTokStr() << '\t';
