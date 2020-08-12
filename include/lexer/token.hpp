@@ -7,6 +7,8 @@
  */
 enum TokType
 {
+    // common
+
     TT_DEFAULT,
 
     KEY_WORD,
@@ -61,7 +63,35 @@ enum TokType
     LEQ,
     GEQ,
 
-    POINT_TO
+    POINT_TO,
+
+    // key words
+
+    KEY_RETURN,
+    KEY_USING,
+    KEY_NAMESPACE,
+    KEY_TYPEDEF,
+
+    KEY_FOR,
+    KEY_WHILE,
+    KEY_DO,
+    KEY_BREAK,
+    KEY_CONTINUE,
+
+    KEY_CLASS,
+    KEY_STRUCT,
+    KEY_ENUM,
+    KEY_TEMPLATE,
+    
+    KEY_STATIC,
+    KEY_CONST,
+    KEY_INLINE,
+
+    KEY_IF,
+    KEY_ELSE,
+    KEY_SWITCH,
+    KEY_CASE,
+    KEY_DEFAULT
 };
 
 /**

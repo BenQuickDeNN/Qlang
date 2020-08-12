@@ -2,31 +2,40 @@
 #define KEY_WORDS_HPP
 #include <string>
 #include <map>
-enum KeyToken
-{
-    KEY_RETURN,
+#include "token.hpp"
 
-    KEY_FOR,
-    KEY_WHILE,
-    KEY_DO,
+static const std::map<std::string, TokType> KEY_WORDS = {
 
-    KEY_CLASS,
-    KEY_STRUCT,
-    KEY_ENUM,
-    
-    KEY_STATIC,
-    KEY_CONST,
-    KEY_INLINE,
+    // common
+    {"return", TokType::KEY_RETURN},
+    {"using", TokType::KEY_USING},
+    {"namespace", TokType::KEY_NAMESPACE},
+    {"typedef", TokType::KEY_TYPEDEF},
 
-    KEY_IF,
-    KEY_ELSE
-};
-static const std::map<std::string, KeyToken> KEY_WORDS = {
-    {"for", KeyToken::KEY_FOR},
-    {"while", KeyToken::KEY_WHILE},
-    {"do", KeyToken::KEY_DO},
-    {"class", KeyToken::KEY_CLASS},
-    {"return", KeyToken::KEY_RETURN}
+    // loop
+    {"for", TokType::KEY_FOR},
+    {"while", TokType::KEY_WHILE},
+    {"do", TokType::KEY_DO},
+    {"break", TokType::KEY_BREAK},
+    {"continue", TokType::KEY_CONTINUE},
+
+    // object
+    {"class", TokType::KEY_CLASS},
+    {"struct", TokType::KEY_STRUCT},
+    {"enum", TokType::KEY_ENUM},
+    {"template", TokType::KEY_TEMPLATE},
+
+    // decorate
+    {"static", TokType::KEY_STATIC},
+    {"const", TokType::KEY_CONST},
+    {"inline", TokType::KEY_INLINE},
+
+    // condition
+    {"if", TokType::KEY_IF},
+    {"else", TokType::KEY_ELSE},
+    {"switch", TokType::KEY_SWITCH},
+    {"case", TokType::KEY_CASE},
+    {"default", TokType::KEY_DEFAULT}
 
 };
 #endif
