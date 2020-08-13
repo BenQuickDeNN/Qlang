@@ -9,7 +9,7 @@ void test1();
 void test2();
 int main()
 {
-    test1();
+    test2();
     return 0;
 }
 void test1()
@@ -216,5 +216,13 @@ void test1()
 }
 void test2()
 {
-    cout << JUMP_TABLE[{JumpState::START, getCharType('h')}] << endl;
+    string testStr2 = readStrFromFile("examples/for_loop.cpp");
+    vector<string> scopes = getScopes(testStr2);
+    for (size_t i = 0; i < scopes.size(); i++)
+    {
+        cout << "#pragma scope " << i + 1 << endl << scopes[i] << endl << "#pragma endscope " << i + 1 << endl;
+        vector<Token> tokens = Lexer::lexStr(scopes[i]);
+        for (const Token &tok : tokens)
+            cout << "toktype = " << tok.getTokType() << ", value = \"" << tok.getTokStr() << "\"" << endl;
+    }
 }

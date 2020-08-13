@@ -58,7 +58,7 @@ public:
             // NAME
             case JumpState::CHECK_KEYWORD:
                 if (isKeyWord(tmp_str))
-                    ret.emplace_back(Token(tmp_str, TokType::KEY_WORD));
+                    ret.emplace_back(Token(tmp_str, KEY_WORDS.at(tmp_str)));
                 else
                     ret.emplace_back(Token(tmp_str, TokType::NAME));
                 tmp_str = "";
