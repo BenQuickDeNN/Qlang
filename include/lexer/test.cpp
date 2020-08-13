@@ -218,7 +218,9 @@ void test2()
 {
     string testStr2 = readStrFromFile("examples/for_loop.cpp");
     vector<string> scopes = getScopes(testStr2);
-    for (size_t i = 0; i < scopes.size(); i++)
+    const size_t n = scopes.size();
+#pragma set n 100
+    for (size_t i = 0; i < n; i++)
     {
         cout << "#pragma scope " << i + 1 << endl << scopes[i] << endl << "#pragma endscope " << i + 1 << endl;
         vector<Token> tokens = Lexer::lexStr(scopes[i]);
