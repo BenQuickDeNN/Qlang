@@ -91,7 +91,21 @@ enum TokType
     KEY_ELSE,
     KEY_SWITCH,
     KEY_CASE,
-    KEY_DEFAULT
+    KEY_DEFAULT,
+
+    KEY_SIZEOF,
+
+    // #
+    POUND_INCLUDE,
+    POUND_DEFINE,
+    POUND_PRAGMA,
+    POUND_IF,
+    POUND_ELSE,
+    POUND_ELSIF,
+    POUND_ENDIF,
+    POUND_IFDEF,
+    POUND_IFNDEF
+
 };
 
 /**

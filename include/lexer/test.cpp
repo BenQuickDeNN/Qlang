@@ -3,6 +3,7 @@
 #include "lexer.hpp"
 #include "token.hpp"
 #include "../file/file.hpp"
+#include "../scope/scope.hpp"
 using namespace std;
 void test1();
 void test2();
@@ -51,7 +52,10 @@ void test1()
     \t}\n\
     }";
     string testStr2 = readStrFromFile("examples/for_loop.cpp");
-    vector<Token> tokens = Lexer::lexStr(testStr2);
+    vector<string> scopeStr = getScopes(testStr2);
+    for (const string &str : scopeStr)
+        cout << "#pragma scope" << endl << str << endl << "#pragma endscope" << endl;
+    vector<Token> tokens = Lexer::lexStr(scopeStr[0]);
     for (const Token &t : tokens)
     {
         cout << t.getTokStr() << '\t';

@@ -23,7 +23,7 @@ static const std::map<std::string, TokType> KEY_WORDS = {
     {"class", TokType::KEY_CLASS},
     {"struct", TokType::KEY_STRUCT},
     {"enum", TokType::KEY_ENUM},
-    {"template", TokType::KEY_TEMPLATE},
+    {"template", TokType::KEY_TEMPLATE}, 
 
     // decorate
     {"static", TokType::KEY_STATIC},
@@ -35,7 +35,21 @@ static const std::map<std::string, TokType> KEY_WORDS = {
     {"else", TokType::KEY_ELSE},
     {"switch", TokType::KEY_SWITCH},
     {"case", TokType::KEY_CASE},
-    {"default", TokType::KEY_DEFAULT}
+    {"default", TokType::KEY_DEFAULT},
+
+    // arithmetic
+    {"sizeof", TokType::KEY_SIZEOF},
+
+    // #
+    {"#include", TokType::POUND_INCLUDE},
+    {"#define", TokType::POUND_DEFINE},
+    {"#pragma", TokType::POUND_PRAGMA},
+    {"#if", TokType::POUND_IF},
+    {"#else", TokType::POUND_ELSE},
+    {"#elsif", TokType::POUND_ELSIF},
+    {"#endif", TokType::POUND_ENDIF},
+    {"#ifdef", TokType::POUND_IFDEF},
+    {"#ifndef", TokType::POUND_IFNDEF}
 
 };
 #endif
