@@ -1,5 +1,5 @@
 # Lexer
-# FM（有限自动机）
+## FM（有限自动机）
 ```mermaid
 graph LR
     0(start) --alpha,underline,pound--> 1;
@@ -37,7 +37,7 @@ graph LR
     2 --dot--> 3;
 
     1.1 --yes--> 1.1.1(KEY_WORD);
-    1.1 --no--> 1.1.2(VARIABLE);
+    1.1 --no--> 1.1.2(NAME);
 
     3 --digit--> 3;
     3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 3.1(FLOAT_POINT);
@@ -110,4 +110,15 @@ graph LR
     22 --dot--> 23;
     
     23 --dot--> 23.1(DOT3);
+```
+
+# Parser
+## 文法
+```
+value --> NAME | INTEGER | FLOAT_POINT # 值
+expr_assign --> NAME ASSIGN value # 赋值表达式
+type_name --> NAME # 类型名
+type_name --> NAME ANGLE_BRACKET_L type_name ANGLE_BRACKET_R # 类型名（带模板）
+decl_var --> type_name NAME # 声明变量
+decl_var --> type_name expr_assign # 声明变量（带赋值）
 ```

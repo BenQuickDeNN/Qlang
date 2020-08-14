@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <iostream>
 #include "loop_tuple.hpp"
 #include "../lexer/token.hpp"
 #include "../utils/utils.hpp"
@@ -41,9 +42,6 @@ public:
             return;
 
         // parse for loop info
-        if (tokens[0].getTokType() != TokType::KEY_FOR)
-            return;
-
         // create tuples
         std::string str;
         TokType tt;
