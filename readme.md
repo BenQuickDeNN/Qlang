@@ -118,7 +118,7 @@ graph LR
 value --> NAME | INTEGER | FLOAT_POINT # 值
 expr_assign --> NAME ASSIGN value # 赋值表达式
 type_name --> NAME # 类型名
-type_name --> NAME ANGLE_BRACKET_L type_name ANGLE_BRACKET_R # 类型名（带模板）
+type_name --> type_name ANGLE_BRACKET_L type_name ANGLE_BRACKET_R # 类型名（带模板）
 decl_var --> type_name NAME # 声明变量
 decl_var --> type_name expr_assign # 声明变量（带赋值）
 ```
