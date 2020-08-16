@@ -4,12 +4,14 @@
 #include "token.hpp"
 #include "../file/file.hpp"
 #include "../scope/scope.hpp"
+#define VNAME(val) (#val)
 using namespace std;
 void test1();
 void test2();
+void test3();
 int main()
 {
-    test2();
+    test3();
     return 0;
 }
 void test1()
@@ -219,7 +221,20 @@ void test2()
     string testStr2 = readStrFromFile("examples/for_loop.cpp");
     vector<string> scopes = getScopes(testStr2);
     const size_t n = scopes.size();
-#pragma set n 100
+    for (size_t i = 0; i < n; i++)
+    {
+        cout << "#pragma scope " << i + 1 << endl << scopes[i] << endl << "#pragma endscope " << i + 1 << endl;
+        vector<Token> tokens = Lexer::lexStr(scopes[i]);
+        for (const Token &tok : tokens)
+            cout << "toktype = " << tok.getTokType() << ", value = \"" << tok.getTokStr() << "\"" << endl;
+    }
+}
+
+void test3()
+{
+    string testStr2 = readStrFromFile("examples/simple-1.cpp");
+    vector<string> scopes = getScopes(testStr2);
+    const size_t n = scopes.size();
     for (size_t i = 0; i < n; i++)
     {
         cout << "#pragma scope " << i + 1 << endl << scopes[i] << endl << "#pragma endscope " << i + 1 << endl;

@@ -69,7 +69,7 @@ public:
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
                                   CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
-                                  CharType::CT_COLON))
+                                  CharType::CT_COLON, CharType::CT_QUES))
                     --idx;
                 break;
 
@@ -83,7 +83,7 @@ public:
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
                                   CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
-                                  CharType::CT_COLON))
+                                  CharType::CT_COLON, CharType::CT_QUES))
                     --idx;
                 break;
             case JumpState::TOK_FLOAT_POINT:
@@ -95,7 +95,7 @@ public:
                                   CharType::SPACE, CharType::ENTER, CharType::CT_EOF,
                                   CharType::CT_ADD, CharType::CT_SUB, CharType::CT_MUL, CharType::CT_DIV,
                                   CharType::CT_AND, CharType::CT_OR, CharType::CT_MOD, CharType::CT_BOOL_NOT, CharType::CT_XOR,
-                                  CharType::CT_COLON))
+                                  CharType::CT_COLON, CharType::CT_QUES))
                     --idx;
                 break;
 
@@ -308,6 +308,12 @@ public:
             case JumpState::TOK_COLON2:
                 tmp_str += c;
                 ret.emplace_back(Token(tmp_str, TokType::COLON2));
+                tmp_str = "";
+                state = JumpState::START;
+                break;
+            case JumpState::TOK_QUES:
+                tmp_str = c;
+                ret.emplace_back(Token(tmp_str, TokType::TT_QUES));
                 tmp_str = "";
                 state = JumpState::START;
                 break;

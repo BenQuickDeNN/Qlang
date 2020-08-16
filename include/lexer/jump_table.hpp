@@ -52,6 +52,7 @@ enum JumpState
     TOK_MOVE_R,
     TOK_COLON,
     TOK_COLON2,
+    TOK_QUES,
     TOK_ADD,
     TOK_SUB,
     TOK_MUL,
@@ -114,6 +115,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::CT_XOR}, JumpState::STATE20},
     {{JumpState::START, CharType::CT_COLON}, JumpState::STATE21},
     {{JumpState::START, CharType::CT_DOT}, JumpState::STATE22},
+    {{JumpState::START, CharType::CT_QUES}, JumpState::TOK_QUES},
 
     {{JumpState::STATE1, CharType::ALPHA}, JumpState::STATE1},
     {{JumpState::STATE1, CharType::UNDERLINE}, JumpState::STATE1},
@@ -142,6 +144,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE1, CharType::CT_BOOL_NOT}, JumpState::CHECK_KEYWORD},
     {{JumpState::STATE1, CharType::CT_XOR}, JumpState::CHECK_KEYWORD},
     {{JumpState::STATE1, CharType::CT_COLON}, JumpState::CHECK_KEYWORD},
+    {{JumpState::STATE1, CharType::CT_QUES}, JumpState::CHECK_KEYWORD},
 
     {{JumpState::STATE2, CharType::DIGIT}, JumpState::STATE2},
     {{JumpState::STATE2, CharType::SPACE}, JumpState::TOK_INTEGER},
@@ -162,6 +165,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE2, CharType::CT_BOOL_NOT}, JumpState::TOK_INTEGER},
     {{JumpState::STATE2, CharType::CT_XOR}, JumpState::TOK_INTEGER},
     {{JumpState::STATE2, CharType::CT_COLON}, JumpState::TOK_INTEGER},
+    {{JumpState::STATE2, CharType::CT_QUES}, JumpState::TOK_INTEGER},
     {{JumpState::STATE2, CharType::CT_DOT}, JumpState::STATE3},
 
     {{JumpState::STATE3, CharType::DIGIT}, JumpState::STATE3},
@@ -181,6 +185,7 @@ static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE3, CharType::CT_BOOL_NOT}, JumpState::TOK_FLOAT_POINT},
     {{JumpState::STATE3, CharType::CT_XOR}, JumpState::TOK_FLOAT_POINT},
     {{JumpState::STATE3, CharType::CT_COLON}, JumpState::TOK_FLOAT_POINT},
+    {{JumpState::STATE3, CharType::CT_QUES}, JumpState::TOK_FLOAT_POINT},
 
     {{JumpState::STATE4, CharType::CT_ASSIGN}, JumpState::TOK_EQUAL},
     {{JumpState::STATE4, CharType::SPACE}, JumpState::TOK_ASSIGN},

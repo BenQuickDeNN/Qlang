@@ -33,6 +33,7 @@ enum TokType
     TT_ANGLE_BRACKET_R,
     COLON,
     COLON2,
+    TT_QUES,
 
     MOVE_L,
     MOVE_R,
@@ -104,8 +105,10 @@ enum TokType
     POUND_ELSIF,
     POUND_ENDIF,
     POUND_IFDEF,
-    POUND_IFNDEF
+    POUND_IFNDEF,
 
+    // last
+    LAST
 };
 
 /**
@@ -138,6 +141,7 @@ enum CharType
     CT_ANGLE_BRACKET_L,
     CT_ANGLE_BRACKET_R,
     CT_COLON,
+    CT_QUES,
 
     CT_ADD,
     CT_SUB,
@@ -219,6 +223,9 @@ static CharType getCharType(const char &c)
             break;
         case ':':
             return CharType::CT_COLON;
+            break;
+        case '?':
+            return CharType::CT_QUES;
             break;
 
         case '_':

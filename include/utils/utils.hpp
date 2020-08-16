@@ -7,6 +7,11 @@ struct Range
 {
     type _start;
     type _end;
+    void setRange(const type &_start, const type &_end)
+    {
+        this->_start = _start;
+        this->_end = _end;
+    }
 };
 
 template <typename type>

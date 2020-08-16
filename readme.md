@@ -28,19 +28,20 @@ graph LR
     0 --xor--> 20;
     0 --colon--> 21;
     0 --dot--> 22;
+    0 --ques--> 0.11(QUES)
 
     1 --alpha,underline,digit--> 1;
-    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 1.1{is key word?};
+    1 --space,enter,eof,comma,dot,semi,assign,parentheses_l,parentheses_r,bracket_l,brace_l,angle_bracket_l,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon,ques--> 1.1{is key word?};
 
     2 --digit--> 2;
-    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 2.1(INTEGER);
+    2 --space,enter,eof,comma,semi,parentheses_r,bracket_r,angle_bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon,ques--> 2.1(INTEGER);
     2 --dot--> 3;
 
     1.1 --yes--> 1.1.1(KEY_WORD);
     1.1 --no--> 1.1.2(NAME);
 
     3 --digit--> 3;
-    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon--> 3.1(FLOAT_POINT);
+    3 --space,enter,eof,comma,semi,parentheses_r,bracket_r,add,sub,mul,div,and,or,mod,bool_not,xor,colon,ques--> 3.1(FLOAT_POINT);
 
     4 --assign--> 4.1(EQUAL);
     4 --space,enter,alpha,underline,digit,parentheses_l,bracket_l,not,bool_not,and--> 4.2(ASSIGN);
@@ -114,11 +115,66 @@ graph LR
 
 # Parser
 ## 文法
+采用最左推导，每步推导都替换最左边的非终结符；LR1文法，向前看若1个token，寻找匹配生成式
 ```
-value --> NAME | INTEGER | FLOAT_POINT # 值
-expr_assign --> NAME ASSIGN value # 赋值表达式
-type_name --> NAME # 类型名
-type_name --> type_name ANGLE_BRACKET_L type_name ANGLE_BRACKET_R # 类型名（带模板）
-decl_var --> type_name NAME # 声明变量
-decl_var --> type_name expr_assign # 声明变量（带赋值）
+root => stmt
+
+stmt => expr SEMI
+
+# 表达式
+# 基本表达式
+expr => PARENTHESES_L expr PARENTHESES_R
+expr => expr DOT expr
+expr => expr COLON2 expr
+expr => expr POINT_TO expr
+expr => NAME
+# 后缀表达式
+expr_postfix => BRACKET_L expr BRACKET_R
+# 一元运算表达式
+expr => expr INCREASE
+expr => expr DECREASE
+expr => INCREASE expr
+expr => DECREASE expr
+expr => MUL expr
+expr => NOT expr
+expr => BOOL_NOT expr
+# 强制类型表达式
+expr => PARENTHESES_L type_name PARENTHESES_R expr
+# 乘除法
+expr => expr MUL expr
+expr => expr DIV expr
+# 加减法
+expr => expr ADD expr
+expr => expr SUB expr
+# 移位表达式
+expr => expr MOVE_L expr
+expr => expr MOVE_R expr
+# 关系运算表达式
+expr => expr ANGLE_BRACKET_L expr
+expr => expr ANGLE_BRACKET_R expr
+expr => expr LEQ expr
+expr => expr GEQ expr
+# 相等运算
+expr => expr EQUAL expr
+expr => expr NOT_EQUAL expr
+# 位与运算
+expr => expr AND expr
+# 位异或运算
+expr => expr XOR expr
+# 位或运算
+expr => expr OR expr
+# 逻辑与运算
+expr => expr BOOL_AND expr
+# 逻辑或运算
+expr => expr BOOL_OR expr
+# 三元条件运算
+expr => expr QUES expr COLON expr
+# 赋值运算
+expr => NAME ASSIGN expr
+...
+# 逗号运算符
+expr => expr COMMA expr
+
+expr => INTEGER
+expr => FLOAT_POINT
 ```
