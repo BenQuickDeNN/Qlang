@@ -3,70 +3,202 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <iostream>
 #include "ast_node.hpp"
 #include "../lexer/token.hpp"
-using Node = ASTNodeType;
-using Tok = TokType;
 
 static ASTNode BuildAST(const std::vector<Token> &tokens);
+static void BuildAST(const std::vector<Token> &tokens, 
+    std::shared_ptr<ASTNode> &p_node);
+
+/**
+ * @brief 判断toks串能否和语法匹配上，并输出匹配终结符的位置
+ */
+static bool isMatch(const std::vector<unsigned int> &toks, 
+    const std::vector<unsigned int> &grammar, 
+    std::vector<size_t> &tok_idxs,
+    const size_t &tok_offset);
 
 /**
  * @brief 生成式列表
  */
 static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> GrammarList =
 {
-    {Node::root, {{Node::stmt}}},
+    {ASTNodeType::root, {{ASTNodeType::stmt}}},
 
-    {Node::stmt, {{Node::expr, TokType::TT_SEMI}}},
+    {ASTNodeType::stmt, {{ASTNodeType::expr, TokType::TT_SEMI}}},
 
     // 基本表达式
-    {Node::expr, 
+    {ASTNodeType::expr, 
         {
             // 基本表达式 优先级=1
-            {Tok::TT_PARENTHESES_L, Node::expr, Tok::TT_PARENTHESES_R},
-            {Node::expr, Tok::TT_DOT, Node::expr},
-            {Node::expr, Tok::COLON2, Node::expr},
-            {Node::expr, Tok::POINT_TO, Node::expr},
-            {Tok::MUL, Node::expr}, // 指针取值
+            {TokType::TT_PARENTHESES_L, ASTNodeType::expr, TokType::TT_PARENTHESES_R},
+            {ASTNodeType::expr, TokType::TT_DOT, ASTNodeType::expr},
+            {ASTNodeType::expr, TokType::COLON2, ASTNodeType::expr},
+            {ASTNodeType::expr, TokType::POINT_TO, ASTNodeType::expr},
+            {TokType::MUL, ASTNodeType::expr}, // 指针取值
+            {TokType::NAME},
 
             // 一元运算表达式 优先级=3
-            {Node::expr, Tok::INCREASE},
-            {Node::expr, Tok::DECREASE},
-            {Tok::INCREASE, Node::expr},
-            {Tok::DECREASE, Node::expr},
-            {Tok::NOT, Node::expr},
-            {Tok::BOOL_NOT, Node::expr},
+            {ASTNodeType::expr, TokType::INCREASE},
+            {ASTNodeType::expr, TokType::DECREASE},
+            {TokType::INCREASE, ASTNodeType::expr},
+            {TokType::DECREASE, ASTNodeType::expr},
+            {TokType::NOT, ASTNodeType::expr},
+            {TokType::BOOL_NOT, ASTNodeType::expr},
 
             // 强制类型表达式 优先级=4
-            {Tok::TT_PARENTHESES_L, Node::type_name, Tok::TT_PARENTHESES_R, Node::expr},
+            {TokType::TT_PARENTHESES_L, ASTNodeType::type_name, TokType::TT_PARENTHESES_R, ASTNodeType::expr},
 
             // 加减法 优先级=6
-            {Node::expr, Tok::ADD, Node::expr},
-            {Node::expr, Tok::SUB, Node::expr},
+            {ASTNodeType::expr, TokType::ADD, ASTNodeType::expr},
+            {ASTNodeType::expr, TokType::SUB, ASTNodeType::expr},
 
             // 赋值运算 优先级=16
-            {Node::expr, Tok::TT_ASSIGN, Node::expr}
+            {ASTNodeType::expr, TokType::TT_ASSIGN, ASTNodeType::expr}
         }
     },
 
     // 后缀表达式 优先级=2
-    {Node::expr_postfix, {{Tok::TT_BRACKET_L, Node::expr, Tok::TT_ANGLE_BRACKET_R}}}
+    {ASTNodeType::expr_postfix, {{TokType::TT_BRACKET_L, ASTNodeType::expr, TokType::TT_ANGLE_BRACKET_R}}}
 };
 // Grammar
 static ASTNode BuildAST(const std::vector<Token> &tokens)
 {
-    int right = tokens.size();
-    Token tok_root("root", (Tok)Node::root);
+    size_t right = tokens.size();
+    Token tok_root((TokType)ASTNodeType::root);
     ASTNode root(tok_root, {0, right});
     std::shared_ptr<ASTNode> p_node = std::make_shared<ASTNode>(root);
-    p_node->children.push_back(std::make_shared<ASTNode>(ASTNode(Token("stmt", (Tok)Node::stmt), root.range)));
-    // 从左向右遍历，找到第一个非终结符
-    for (auto &node : p_node->children)
+    BuildAST(tokens, p_node);
+    return root;
+}
+static void BuildAST(const std::vector<Token> &tokens, std::shared_ptr<ASTNode> &p_node)
+{
+    if (p_node == nullptr)
+        return;
+    std::cout << "ast building " << p_node->token.getTokType() << std::endl;
+    // std::cout << "range = {" << p_node->range._start << ", " << p_node->range._end << "}" << std::endl;
+    // 遍历token，看看有没有终结符与生成式匹配
+    std::vector<unsigned int> toks;
+    for (size_t i = p_node->range._start; i < p_node->range._end; ++i)
+        toks.emplace_back((unsigned int)tokens[i].getTokType());
+    TokType tokType = p_node->token.getTokType();
+    auto it = GrammarList.find(tokType);
+    if (it == GrammarList.end())
     {
-        if (ASTNode::isNonterminal(*node))
+        return;
+    }
+    // std::cout << "toktype check pass" << std::endl;
+    const auto &grammars = it->second;
+    // std::cout << "size of gramars = " << grammars.size() << std::endl;
+    std::vector<size_t> tok_idxs;
+    for (size_t i = grammars.size() - 1; i >= 0; --i)
+    {   
+        auto grammar = grammars[i];
+        // 若匹配，则展开当前节点
+        // std::cout << "check matched " << p_node->token.getTokType() << std::endl;
+        // std::cout << "toks.size() = " << toks.size() << std::endl;
+        if (isMatch(toks, grammar, tok_idxs, p_node->range._start))
         {
-
+            //std::cout << "matched" << std::endl;
+            size_t left = p_node->range._start, right;
+            std::cout << "tok_idxs.size() = " << tok_idxs.size() << std::endl;
+            size_t j = 0;
+            for (const auto &nodeType : grammar)
+            {
+                if (Token::isToken(nodeType))
+                {
+                    //std::cout << "left = " << left << ", right = " << right << std::endl;
+                    p_node->children.emplace_back(
+                        std::make_shared<ASTNode>(
+                            ASTNode(
+                                Token((TokType)nodeType),
+                                {tok_idxs[j], tok_idxs[j] + 1}
+                            )));
+                    ++j;
+                }
+                else
+                {
+                    if (j < tok_idxs.size())
+                        right = tok_idxs[j];
+                    else
+                        right = p_node->range._end;
+                    //std::cout << "left = " << left << ", right = " << right << std::endl;
+                    p_node->children.emplace_back(
+                        std::make_shared<ASTNode>(
+                            ASTNode(
+                                Token((TokType)nodeType),
+                                {left, right}
+                            )));
+                    if (j < tok_idxs.size())
+                        left = tok_idxs[j] + 1;
+                }
+            }
+            
+            break;
         }
     }
+    
+    for (auto &child : p_node->children)
+        std::cout << "child = " << child->token.getTokType() << ", range = {" << child->range._start << ", " << child->range._end << "}" << std::endl;
+    // 从左向右遍历，找到非终结符并递归
+    // 最左推导；如果想改成最右推导，从右向左遍历即可
+    for (auto &child : p_node->children)
+        if (child->isNonterminal())
+            BuildAST(tokens, child);
+}
+/**
+ * @brief 判断toks串能否和语法匹配上，并输出匹配终结符的位置
+ */
+static bool isMatch(const std::vector<unsigned int> &toks, 
+    const std::vector<unsigned int> &grammar, 
+    std::vector<size_t> &tok_idxs,
+    const size_t &tok_offset)
+{
+    if (toks.empty())
+        return false;
+    if (grammar.empty())
+        return false;
+    // 对比首尾终结符
+    // 首
+    auto first1 = toks[0];
+    auto first2 = grammar[0];
+    if (Token::isToken(first2) && first1 != first2)
+        return false;
+    // 尾
+    auto last1 = toks[toks.size() - 1];
+    auto last2 = grammar[grammar.size() - 1];
+    if (Token::isToken(last2) && last1 != last2)
+        return false;
+    // 看看gramar中所有的终结符是不是都能在toks中找到
+    size_t i = 0;
+    //std::cout << "isMatched: head and tail are the same" << std::endl;
+    for (const auto &TokType : grammar)
+        if (Token::isToken(TokType))
+        {
+            bool isMatched = false;
+            for (; i < toks.size(); ++i)
+                if (toks[i] == TokType)
+                {
+                    tok_idxs.emplace_back(i + tok_offset);
+                    isMatched = true;
+                    break;
+                }
+            if (!isMatched)
+            {
+                // std::cout << "isMatched: dismatched" << std::endl;
+                return false;
+            }
+        }
+    //std::cout << "isMatched: matched" << std::endl;
+    return true;
+}
+
+/**
+ * @brief display tree structure in BFS order
+ */
+void dispBFS(const ASTNode &ast_node)
+{
+
 }
 #endif

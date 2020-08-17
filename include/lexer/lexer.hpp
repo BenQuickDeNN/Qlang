@@ -31,8 +31,9 @@ public:
             // std::cout << "idx = " << idx << ' '<< "get '" << c << "', ascii=" << (int)c << std::endl;
             ct = getCharType(c);
             last_state = state;
-            if (JUMP_TABLE.find({state, ct}) != JUMP_TABLE.end())
-                state = JUMP_TABLE[{state, ct}]; // jump state
+            auto it = JUMP_TABLE.find({state, ct});
+            if (it != JUMP_TABLE.end())
+                state = it->second; // jump state
             else
             {
                 std::cerr << "lex error in idx=" << idx << ", c='" << c << "': unknown state or chartype" << std::endl;

@@ -28,10 +28,11 @@ struct ASTNode
     /**
      * @brief check is nonterminal symbol
      */
-    static bool isNonterminal(const ASTNode &node)
+    bool isNonterminal()
     {
-        auto toktype = node.token.getTokType();
-        return toktype < ASTNodeType::last && toktype >= ASTNodeType::root;
+        auto toktype = (ASTNodeType)token.getTokType();
+        return toktype < ASTNodeType::last && 
+            toktype >= ASTNodeType::root;
     }
 };
 #endif

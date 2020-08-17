@@ -2,6 +2,7 @@
 #define TOKEN_HPP
 #include <string>
 #include <cstdlib>
+#include <iostream>
 /**
  * @brief type of token
  */
@@ -295,6 +296,10 @@ public:
     }
     void setTokType(const TokType &tok_type) {
         this->tok_type = tok_type;
+    }
+    static bool isToken(const unsigned int &tok)
+    {
+        return tok >= TokType::TT_DEFAULT && tok < TokType::LAST;
     }
 
 private:
