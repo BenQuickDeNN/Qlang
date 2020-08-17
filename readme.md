@@ -115,24 +115,22 @@ graph LR
 
 # Parser
 ## 文法
-采用最左推导，每步推导都替换最左边的非终结符；LR1文法，向前看若1个token，寻找匹配生成式
+采用最右推导，每步推导替换最右边的非终结符，寻找运算符优先级最低的匹配生成式
 ```
 root => stmt
 
 stmt => expr SEMI
 
 # 表达式
-# 基本表达式
+# 基本表达式 1
 expr => PARENTHESES_L expr PARENTHESES_R
 expr => expr DOT expr
 expr => expr COLON2 expr
 expr => expr POINT_TO expr
 expr => NAME
-expr => INTEGER
-expr => FLOAT_POINT
-# 后缀表达式
+# 后缀表达式 2
 expr_postfix => BRACKET_L expr BRACKET_R
-# 一元运算表达式
+# 一元运算表达式 3
 expr => expr INCREASE
 expr => expr DECREASE
 expr => INCREASE expr
@@ -140,40 +138,45 @@ expr => DECREASE expr
 expr => MUL expr
 expr => NOT expr
 expr => BOOL_NOT expr
-# 强制类型表达式
+# 强制类型表达式 4
 expr => PARENTHESES_L type_name PARENTHESES_R expr
-# 乘除法
+# 乘除法 5
 expr => expr MUL expr
 expr => expr DIV expr
-# 加减法
+# 加减法 6
 expr => expr ADD expr
 expr => expr SUB expr
-# 移位表达式
+# 移位表达式 7
 expr => expr MOVE_L expr
 expr => expr MOVE_R expr
-# 关系运算表达式
+# 关系运算表达式 8
 expr => expr ANGLE_BRACKET_L expr
 expr => expr ANGLE_BRACKET_R expr
 expr => expr LEQ expr
 expr => expr GEQ expr
-# 相等运算
+# 相等运算 9
 expr => expr EQUAL expr
 expr => expr NOT_EQUAL expr
-# 位与运算
+# 位与运算 10
 expr => expr AND expr
-# 位异或运算
+# 位异或运算 11
 expr => expr XOR expr
-# 位或运算
+# 位或运算 12
 expr => expr OR expr
-# 逻辑与运算
+# 逻辑与运算 13
 expr => expr BOOL_AND expr
-# 逻辑或运算
+# 逻辑或运算 14
 expr => expr BOOL_OR expr
-# 三元条件运算
+# 三元条件运算 15
 expr => expr QUES expr COLON expr
-# 赋值运算
-expr => NAME ASSIGN expr
+# 赋值运算 16
+expr => expr ASSIGN expr
 ...
-# 逗号运算符
+# 逗号运算符 17
 expr => expr COMMA expr
+
+# 常量表达式
+expr_const => CONST NAME
+expr_const => INTEGER
+expr_const => FLOAT_POINT
 ```
