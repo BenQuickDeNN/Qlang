@@ -282,6 +282,7 @@ class Token
 
 public:
     Token() {}
+    Token(const TokType &tok_type) : tok_type(tok_type) {}
     Token(const std::string &tok_str, const TokType &tok_type) : tok_str(tok_str), tok_type(tok_type) {}
     std::string getTokStr() const {
         return tok_str;

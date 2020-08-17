@@ -12,7 +12,13 @@ struct Range
         this->_start = _start;
         this->_end = _end;
     }
+    void operator = (const type _range[2])
+    {
+        _start = _range[0];
+        _end = _range[1];
+    }
 };
+
 
 template <typename type>
 static std::vector<type> getSubVector(const std::vector<type> &vec, const size_t &_pos, const size_t &_size)

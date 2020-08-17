@@ -115,7 +115,7 @@ graph LR
 
 # Parser
 ## 文法
-采用最右推导，每步推导替换最右边的非终结符，寻找运算符优先级最低的匹配生成式
+采用最左推导
 ```
 root => stmt
 
@@ -128,6 +128,7 @@ expr => expr DOT expr
 expr => expr COLON2 expr
 expr => expr POINT_TO expr
 expr => NAME
+expr => MUL expr
 # 后缀表达式 2
 expr_postfix => BRACKET_L expr BRACKET_R
 # 一元运算表达式 3
@@ -135,7 +136,6 @@ expr => expr INCREASE
 expr => expr DECREASE
 expr => INCREASE expr
 expr => DECREASE expr
-expr => MUL expr
 expr => NOT expr
 expr => BOOL_NOT expr
 # 强制类型表达式 4
@@ -179,4 +179,9 @@ expr => expr COMMA expr
 expr_const => CONST NAME
 expr_const => INTEGER
 expr_const => FLOAT_POINT
+
+# 类型
+type_name => type_name ANGLE_BRACKET_L type_name ANGLE_BRACKET_R
+type_name => type_name COLON2 type_name
+type_name => NAME
 ```

@@ -6,18 +6,32 @@
 #include "../utils/utils.hpp"
 enum ASTNodeType
 {
-    expr = TokType::LAST + 1,
-    stmt = expr + 1
+    root = TokType::LAST + 1,
+    stmt = root + 1,
+    expr = stmt + 1,
+    expr_postfix = expr + 1,
+    expr_const = expr_postfix + 1,
+    type_name = expr_const + 1,
+    last = type_name + 1
 };
 /**
  * @brief node of AST
  */
 struct ASTNode
 {
-    ASTNodeType nodeType;
-    bool canLookForward = false;
+    Token token;
     Range<size_t> range;
-    std::shared_ptr<std::vector<Token>> p_tok;
-    std::vector<ASTNode*> children;
+    std::vector<std::shared_ptr<ASTNode>> children;
+    ASTNode() {}
+    ASTNode(const Token &token, const Range<size_t> &range)
+        : token(token), range(range) {}
+    /**
+     * @brief check is nonterminal symbol
+     */
+    static bool isNonterminal(const ASTNode &node)
+    {
+        auto toktype = node.token.getTokType();
+        return toktype < ASTNodeType::last && toktype >= ASTNodeType::root;
+    }
 };
 #endif

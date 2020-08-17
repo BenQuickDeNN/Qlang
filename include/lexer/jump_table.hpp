@@ -84,7 +84,7 @@ enum JumpState
 /**
  * @brief 状态跳转表
  */
-static std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
+static const std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::START, CharType::ALPHA}, JumpState::STATE1},
     {{JumpState::START, CharType::UNDERLINE}, JumpState::STATE1},
     {{JumpState::START, CharType::CT_POUND}, JumpState::STATE1},
