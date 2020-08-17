@@ -128,6 +128,8 @@ expr => expr DOT expr
 expr => expr COLON2 expr
 expr => expr POINT_TO expr
 expr => NAME
+expr => INTEGER
+expr => FLOAT_POINT
 # 后缀表达式
 expr_postfix => BRACKET_L expr BRACKET_R
 # 一元运算表达式
@@ -174,7 +176,4 @@ expr => NAME ASSIGN expr
 ...
 # 逗号运算符
 expr => expr COMMA expr
-
-expr => INTEGER
-expr => FLOAT_POINT
 ```
