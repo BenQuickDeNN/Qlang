@@ -12,7 +12,7 @@ enum ASTNodeType
     expr_postfix = expr + 1,
     expr_const = expr_postfix + 1,
     type_name = expr_const + 1,
-    last = type_name + 1
+    last = expr_const + 1
 };
 /**
  * @brief node of AST

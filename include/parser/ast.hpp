@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <queue>
 #include "ast_node.hpp"
 #include "../lexer/token.hpp"
 
@@ -49,10 +50,11 @@ static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> Gram
 
             // 强制类型表达式 优先级=4
             {TokType::TT_PARENTHESES_L, ASTNodeType::type_name, TokType::TT_PARENTHESES_R, ASTNodeType::expr},
-
+            // 乘除法 优先级=5
             // 加减法 优先级=6
-            {ASTNodeType::expr, TokType::ADD, ASTNodeType::expr},
-            {ASTNodeType::expr, TokType::SUB, ASTNodeType::expr},
+            // {ASTNodeType::expr, TokType::ADD, ASTNodeType::expr},
+            // {ASTNodeType::expr, TokType::SUB, ASTNodeType::expr},
+            {ASTNodeType::expr, TokType::OP_LEVEL_6, ASTNodeType::expr},
 
             // 赋值运算 优先级=16
             {ASTNodeType::expr, TokType::TT_ASSIGN, ASTNodeType::expr}
@@ -65,12 +67,21 @@ static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> Gram
 // Grammar
 static ASTNode BuildAST(const std::vector<Token> &tokens)
 {
+    // 处理token中运算符的优先级
+    std::vector<Token> _tokens(tokens.size());
+    for (size_t i = 0; i < tokens.size(); i++)
+    {
+        auto tt = tokens[i].getTokType();
+        _tokens[i] = tokens[i];
+        if (tt == TokType::ADD || tt == TokType::SUB)
+            _tokens[i].setTokType(TokType::OP_LEVEL_6);
+    }
     size_t right = tokens.size();
     Token tok_root((TokType)ASTNodeType::root);
     ASTNode root(tok_root, {0, right});
     std::shared_ptr<ASTNode> p_node = std::make_shared<ASTNode>(root);
-    BuildAST(tokens, p_node);
-    return root;
+    BuildAST(_tokens, p_node);
+    return *p_node;
 }
 static void BuildAST(const std::vector<Token> &tokens, std::shared_ptr<ASTNode> &p_node)
 {
@@ -102,7 +113,7 @@ static void BuildAST(const std::vector<Token> &tokens, std::shared_ptr<ASTNode> 
         {
             //std::cout << "matched" << std::endl;
             size_t left = p_node->range._start, right;
-            std::cout << "tok_idxs.size() = " << tok_idxs.size() << std::endl;
+            // std::cout << "tok_idxs.size() = " << tok_idxs.size() << std::endl;
             size_t j = 0;
             for (const auto &nodeType : grammar)
             {
@@ -112,7 +123,7 @@ static void BuildAST(const std::vector<Token> &tokens, std::shared_ptr<ASTNode> 
                     p_node->children.emplace_back(
                         std::make_shared<ASTNode>(
                             ASTNode(
-                                Token((TokType)nodeType),
+                                Token(tokens[tok_idxs[j]]),
                                 {tok_idxs[j], tok_idxs[j] + 1}
                             )));
                     ++j;
@@ -139,8 +150,11 @@ static void BuildAST(const std::vector<Token> &tokens, std::shared_ptr<ASTNode> 
         }
     }
     
-    for (auto &child : p_node->children)
-        std::cout << "child = " << child->token.getTokType() << ", range = {" << child->range._start << ", " << child->range._end << "}" << std::endl;
+     for (auto &child : p_node->children)
+       std::cout << "child = " << child->token.getTokType() << 
+        ", range = {" << child->range._start << ", " << 
+        child->range._end << "}" << ", value = \"" << 
+        child->token.getTokStr() << "\"" << std::endl;
     // 从左向右遍历，找到非终结符并递归
     // 最左推导；如果想改成最右推导，从右向左遍历即可
     for (auto &child : p_node->children)
@@ -171,15 +185,16 @@ static bool isMatch(const std::vector<unsigned int> &toks,
     if (Token::isToken(last2) && last1 != last2)
         return false;
     // 看看gramar中所有的终结符是不是都能在toks中找到
-    size_t i = 0;
+    int i = toks.size() - 1;
     //std::cout << "isMatched: head and tail are the same" << std::endl;
-    for (const auto &TokType : grammar)
-        if (Token::isToken(TokType))
+    for (int j = grammar.size() - 1; j >= 0; --j)
+        if (Token::isToken(grammar[j]))
         {
             bool isMatched = false;
-            for (; i < toks.size(); ++i)
-                if (toks[i] == TokType)
+            for (; i >= 0; --i)
+                if (toks[i] == grammar[j])
                 {
+                    std::cout << i + tok_offset << std::endl;
                     tok_idxs.emplace_back(i + tok_offset);
                     isMatched = true;
                     break;
@@ -195,10 +210,20 @@ static bool isMatch(const std::vector<unsigned int> &toks,
 }
 
 /**
- * @brief display tree structure in BFS order
+ * @brief display tree structure in DFS order
  */
-void dispBFS(const ASTNode &ast_node)
+void dispDFS(const std::shared_ptr<ASTNode> p_node, const size_t &depth)
 {
-
+    if (p_node == nullptr)
+        return;
+    // std::cout << "check " <<p_node->token.getTokType() << std::endl;
+    for (size_t i = 0; i < depth; ++i)
+        std::cout << "--";
+    if (depth > 0)
+        std::cout << "> ";
+    std::cout << p_node->token.getTokType() << " \"" << p_node->token.getTokStr() << "\"" << std::endl;
+    // std::cout << p_node->children.size() << std::endl;
+    for (const auto &child : p_node->children)
+        dispDFS(child, depth + 1);
 }
 #endif

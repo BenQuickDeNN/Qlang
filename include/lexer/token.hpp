@@ -108,6 +108,8 @@ enum TokType
     POUND_IFDEF,
     POUND_IFNDEF,
 
+    OP_LEVEL_6,
+
     // last
     LAST
 };

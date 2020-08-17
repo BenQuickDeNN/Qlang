@@ -20,11 +20,15 @@ void test1()
     for (const auto &scope : scopes)
     {
         cout << "scope {" << endl << scope << endl << "} endscope" << endl;
+        cout << endl;
         auto tokens = Lexer::lexStr(scope);
         cout << "tokens:" << endl;
         for (const Token &tok : tokens)
-            std::cout << "toktype = " << tok.getTokType() 
+            cout << "toktype = " << tok.getTokType() 
                 << ", tokval = " << tok.getTokStr() << endl;
-        auto ast = BuildAST(tokens);
+        cout << endl;
+        ASTNode ast = BuildAST(tokens);
+        cout << "AST:" << endl;
+        dispDFS(make_shared<ASTNode>(ast), 0);
     }
 }
