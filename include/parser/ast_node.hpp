@@ -1,5 +1,4 @@
-#ifndef AST_NODE_HPP
-#define AST_NODE_HPP
+#pragma once
 #include <vector>
 #include <memory>
 #include "../lexer/token.hpp"
@@ -35,4 +34,3 @@ struct ASTNode
             toktype >= ASTNodeType::root;
     }
 };
-#endif

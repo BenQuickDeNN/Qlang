@@ -1,5 +1,4 @@
-#ifndef LOOP_HPP
-#define LOOP_HPP
+#pragma once
 #include <string>
 #include <vector>
 #include <memory>
@@ -64,4 +63,3 @@ private:
     std::vector<LoopTuple> _tuples;
     std::vector<Token> _tokens;
 };
-#endif

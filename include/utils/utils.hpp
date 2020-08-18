@@ -1,5 +1,4 @@
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#pragma once
 #include <vector>
 
 template <typename type>
@@ -28,4 +27,3 @@ static std::vector<type> getSubVector(const std::vector<type> &vec, const size_t
         ret[j] = vec[i];
     return ret;
 }
-#endif

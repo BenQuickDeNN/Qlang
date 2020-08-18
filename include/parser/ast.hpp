@@ -1,5 +1,4 @@
-#ifndef AST_HPP
-#define AST_HPP
+#pragma once
 #include <memory>
 #include <map>
 #include <vector>
@@ -227,4 +226,3 @@ void dispDFS(const std::shared_ptr<ASTNode> p_node, const size_t &depth)
     for (const auto &child : p_node->children)
         dispDFS(child, depth + 1);
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef JUMP_TABLE_HPP
-#define JUMP_TABLE_HPP
+#pragma once
 #include <map>
 #include <utility>
 #include "token.hpp"
@@ -441,5 +440,3 @@ static const std::map<std::pair<JumpState, CharType>, JumpState> JUMP_TABLE = {
     {{JumpState::STATE23, CharType::CT_DOT}, JumpState::TOK_DOT3}
 
 };
-
-#endif

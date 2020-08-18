@@ -1,5 +1,4 @@
-#ifndef TOKEN_HPP
-#define TOKEN_HPP
+#pragma once
 #include <string>
 #include <cstdlib>
 #include <iostream>
@@ -308,4 +307,3 @@ private:
     std::string tok_str;
     TokType tok_type = TokType::TT_DEFAULT;
 };
-#endif

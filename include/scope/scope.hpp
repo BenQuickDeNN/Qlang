@@ -1,5 +1,4 @@
-#ifndef SCOPE_HPP
-#define SCOPE_HPP
+#pragma once
 #include <string>
 #include <vector>
 #include <iostream>
@@ -71,4 +70,3 @@ static std::vector<std::string> getScopes(const std::string &str)
     }
     return ret;
 }
-#endif

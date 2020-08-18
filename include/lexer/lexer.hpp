@@ -1,5 +1,4 @@
-#ifndef LEXER_HPP
-#define LEXER_HPP
+#pragma once
 
 #include <vector>
 #include <iostream>
@@ -550,5 +549,3 @@ private:
                   << ", bad character '" << c << "'." << std::endl;
     }
 };
-
-#endif

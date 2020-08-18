@@ -1,5 +1,4 @@
-#ifndef KEY_WORDS_HPP
-#define KEY_WORDS_HPP
+#pragma once
 #include <string>
 #include <map>
 #include "token.hpp"
@@ -52,4 +51,3 @@ static const std::map<std::string, TokType> KEY_WORDS = {
     {"#ifndef", TokType::POUND_IFNDEF}
 
 };
-#endif

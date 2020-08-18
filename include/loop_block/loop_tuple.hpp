@@ -1,5 +1,4 @@
-#ifndef LOOP_TUPLE_HPP
-#define LOOP_TUPLE_HPP
+#pragma once
 #include <string>
 #include <vector>
 /**
@@ -15,5 +14,3 @@ struct LoopTuple
     Address addrW; // address for write
     std::vector<Address> addrRs; // addresses for read
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef FILE_HPP
-#define FILE_HPP
+#pragma once
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -14,4 +13,3 @@ static std::string readStrFromFile(const std::string &filename)
     ifile.close();
     return buf.str();
 }
-#endif
