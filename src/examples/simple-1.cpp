@@ -2,7 +2,7 @@ int main()
 {
     int a, b, c;
 #pragma scope
-    c = a + (b - a);
+    c = a;
 #pragma endscope
     return 0;
 }
