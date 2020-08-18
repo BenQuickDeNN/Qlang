@@ -33,12 +33,12 @@ static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> Gram
     {ASTNodeType::expr, 
         {
             // 基本表达式 优先级=1
-            {TokType::TT_PARENTHESES_L, ASTNodeType::expr, TokType::TT_PARENTHESES_R},
             {ASTNodeType::expr, TokType::TT_DOT, ASTNodeType::expr},
             {ASTNodeType::expr, TokType::COLON2, ASTNodeType::expr},
             {ASTNodeType::expr, TokType::POINT_TO, ASTNodeType::expr},
             {TokType::MUL, ASTNodeType::expr}, // 指针取值
             {TokType::NAME},
+            {TokType::TT_PARENTHESES_L, ASTNodeType::expr, TokType::TT_PARENTHESES_R},
 
             // 一元运算表达式 优先级=3
             {ASTNodeType::expr, TokType::INCREASE},
@@ -58,6 +58,7 @@ static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> Gram
 
             // 赋值运算 优先级=16
             {ASTNodeType::expr, TokType::TT_ASSIGN, ASTNodeType::expr}
+
         }
     },
 
@@ -175,15 +176,15 @@ static bool isMatch(const std::vector<unsigned int> &toks,
         return false;
     // 对比首尾终结符
     // 首
-    auto first1 = toks[0];
-    auto first2 = grammar[0];
-    if (Token::isToken(first2) && first1 != first2)
-        return false;
+    // auto first1 = toks[0];
+    // auto first2 = grammar[0];
+    // if (Token::isToken(first2) && first1 != first2)
+    //    return false;
     // 尾
-    auto last1 = toks[toks.size() - 1];
-    auto last2 = grammar[grammar.size() - 1];
-    if (Token::isToken(last2) && last1 != last2)
-        return false;
+    // auto last1 = toks[toks.size() - 1];
+    // auto last2 = grammar[grammar.size() - 1];
+    // if (Token::isToken(last2) && last1 != last2)
+    //    return false;
     // 看看gramar中所有的终结符是不是都能在toks中找到
     int i = toks.size() - 1;
     //std::cout << "isMatched: head and tail are the same" << std::endl;
