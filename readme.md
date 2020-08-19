@@ -150,12 +150,12 @@ expr => expr COLON2 expr
 expr => expr POINT_TO expr
 expr => NAME
 expr => expr_const
-expr => expr expr_postfix
+expr => expr_postfix expr BRACKET_R
 expr => expr_decl
 # expr => MUL NAME # 指针
 
 # 后缀表达式 2
-expr_postfix => BRACKET_L expr BRACKET_R
+expr_postfix => expr BRACKET_L
 
 # 一元运算表达式 3
 expr => expr INCREASE

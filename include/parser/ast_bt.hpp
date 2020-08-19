@@ -39,9 +39,9 @@ static const std::map<uint64_t, uint64_t> GrammarMap = {
     
     {getASTKey(NAME), expr},
     {getASTKey(expr_const), expr},
-    {getASTKey(expr, expr_postfix), expr},
+    {getASTKey(expr_postfix, expr, TT_BRACKET_R), expr},
     {getASTKey(expr_decl), expr},
-    {getASTKey(TT_BRACKET_L, expr, TT_BRACKET_R), expr_postfix},
+    {getASTKey(expr, TT_BRACKET_L), expr_postfix},
     {getASTKey(TT_PARENTHESES_L, expr, TT_PARENTHESES_R), expr},
     {getASTKey(expr, INCREASE), expr},
     {getASTKey(INCREASE, expr), expr},
@@ -90,9 +90,9 @@ static const std::map<uint64_t, uint64_t> PriorityMap = {
 
     {getASTKey(NAME), 1},
     {getASTKey(expr_const), 1},
-    {getASTKey(expr, expr_postfix), 1},
+    {getASTKey(expr_postfix, expr, TT_BRACKET_R), 1},
     {getASTKey(expr_decl), 1},
-    {getASTKey(TT_BRACKET_L, expr, TT_BRACKET_R), 2},
+    {getASTKey(expr, TT_BRACKET_L), 2},
     {getASTKey(expr, INCREASE), 3},
     {getASTKey(INCREASE, expr), 3},
     {getASTKey(expr, DECREASE), 3},
@@ -232,7 +232,10 @@ private:
      */
     static bool cmp_astNodeBuff(const ASTNodeBuff &a, const ASTNodeBuff &b)
     {
-        return a.priority < b.priority;
+        if (a.priority == b.priority)
+            return a.range_real._start < b.range_real._start;
+        else
+            return a.priority < b.priority;
     }
 
     /**
