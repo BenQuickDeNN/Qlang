@@ -115,11 +115,11 @@ graph LR
 
 # Parser
 ## 文法
-采用最左推导\
-注意：一条生成式中不能有两个连续的非终结符
+采用自底向上LR文法
 ```
 root => stmt
-
+stmt_list => stmt_list stmt
+stmt_list => stmt
 stmt => expr SEMI
 
 # 表达式
@@ -130,6 +130,7 @@ expr => expr COLON2 expr
 expr => expr POINT_TO expr
 expr => NAME
 expr => MUL expr
+expr => expr_const
 # 后缀表达式 2
 expr_postfix => BRACKET_L expr BRACKET_R
 # 一元运算表达式 3
@@ -177,7 +178,7 @@ expr => expr ASSIGN expr
 expr => expr COMMA expr
 
 # 常量表达式
-expr_const => CONST NAME
+expr_const => CONST expr
 expr_const => INTEGER
 expr_const => FLOAT_POINT
 

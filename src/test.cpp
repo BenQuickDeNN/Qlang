@@ -47,15 +47,16 @@ void test3()
     auto scopes = getScopes(text);
     for (const auto &scope : scopes)
     {
-        cout << "scope {" << endl << scope << endl << "} endscope" << endl;
+        cout << "--------------------------------------------scope--------------------------------------------" << endl 
+            << scope << endl << "--------------------------------------------endscope--------------------------------------------" << endl;
         cout << endl;
         auto tokens = Lexer::lexStr(scope);
-        cout << "lexing:" << endl;
+        cout << "--------------------------------------------lexing--------------------------------------------" << endl;
         for (const Token &tok : tokens)
             cout << "toktype = " << tok.getTokType() 
                 << ", tokval = " << tok.getTokStr() << endl;
         cout << endl;
-        cout << "parsing:" << endl;
+        cout << "--------------------------------------------parsing--------------------------------------------" << endl;
         auto ast = ASTBuilder::buildAST(tokens);
         dispDFS(ast, 0);
     }

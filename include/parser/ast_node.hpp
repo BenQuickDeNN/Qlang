@@ -6,7 +6,8 @@
 enum ASTNodeType
 {
     root = TokType::LAST + 1,
-    stmt = root + 1,
+    stmt_list = root + 1,
+    stmt = stmt_list + 1,
     expr = stmt + 1,
     expr_postfix = expr + 1,
     expr_const = expr_postfix + 1,

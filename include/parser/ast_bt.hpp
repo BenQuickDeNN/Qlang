@@ -11,6 +11,7 @@
 #include "ast_node.hpp"
 #include "lexer/token.hpp"
 #include "utils/utils.hpp"
+#include "lexer/tok_str.hpp"
 extern void dispDFS(const std::shared_ptr<ASTNode> p_node, const size_t &depth);
 template <typename type = uint64_t>
 static const uint64_t getASTKey(const type tok)
@@ -26,26 +27,47 @@ static const uint64_t getASTKey(const type tok, const types... toks)
 
 // 生成规则表
 static const std::map<uint64_t, uint64_t> GrammarMap = {
-    {getASTKey(stmt), root},
+    {getASTKey(stmt_list), root},
+    {getASTKey(stmt_list, stmt), stmt_list},
+    {getASTKey(stmt), stmt_list},
+    {getASTKey(expr, TT_SEMI), stmt},
+    
     {getASTKey(NAME), expr},
+    {getASTKey(expr_const), expr},
+    {getASTKey(expr, INCREASE), expr},
+    {getASTKey(INCREASE, expr), expr},
     {getASTKey(expr, MUL, expr), expr},
     {getASTKey(expr, DIV, expr), expr},
     {getASTKey(expr, ADD, expr), expr},
     {getASTKey(expr, SUB, expr), expr},
     {getASTKey(expr, TT_ASSIGN, expr), expr},
-    {getASTKey(expr, TT_SEMI), stmt}
+
+    {getASTKey(KEY_CONST, expr), expr_const},
+    {getASTKey(INTEGER), expr_const},
+    {getASTKey(FLOAT_POINT), expr_const}
 };
 
 // 优先级表
 static const std::map<uint64_t, uint64_t> PriorityMap = {
-    {getASTKey(stmt), 0},
+    
+    {getASTKey(expr, TT_SEMI), 100},
+    {getASTKey(stmt_list, stmt), 101},
+    {getASTKey(stmt), 102},
+    {getASTKey(stmt_list), 103},
+
     {getASTKey(NAME), 1},
+    {getASTKey(expr_const), 1},
+    {getASTKey(expr, INCREASE), 3},
+    {getASTKey(INCREASE, expr), 3},
     {getASTKey(expr, MUL, expr), 5},
     {getASTKey(expr, DIV, expr), 5},
     {getASTKey(expr, ADD, expr), 6},
     {getASTKey(expr, SUB, expr), 6},
-    {getASTKey(expr, TT_ASSIGN, expr), 16},
-    {getASTKey(expr, TT_SEMI), 100}
+    {getASTKey(expr, TT_ASSIGN, expr), 9},
+
+    {getASTKey(KEY_CONST, expr), 1},
+    {getASTKey(INTEGER), 1},
+    {getASTKey(FLOAT_POINT), 1}
 };
 
 // symbol priority
@@ -80,21 +102,32 @@ public:
         }
         if (tree.empty())
             return nullptr;
+        if (tree.back().size() != 1)
+            return nullptr;
+        // 打印语法推导过程
         for (int i = tree.size() - 1; i >= 0; --i)
         {
             if (i < tree.size() - 1)
                 std::cout << "=> ";
             for (auto &n : tree[i])
             {
-                std::cout << n.token.getTokType();
-                std::cout << '{' << n.range._start << ',' << n.range._end << "}";
+                if (n.token.getTokStr().size() > 0)
+                    std::cout << n.token.getTokStr();
+                else
+                {
+                    auto it = TokStrMap.find( n.token.getTokType());
+                    if (it != TokStrMap.end())
+                        std::cout << it->second;
+                    else
+                        std::cout << n.token.getTokType();
+                }
                 std::cout << ' ';
             }
             std::cout << std::endl;
         }
         p_node = std::make_shared<ASTNode>(tree.back().front());
         buildAST(tree, tree.size() - 1, p_node, true);
-        std::cout << "AST is built" << std::endl;
+        std::cout << "AST is built" << std::endl << std::endl;
         return p_node;
     }
 private:
@@ -190,28 +223,19 @@ private:
         const int j = level - 1;
         bool flag_addChild = false;
         for (auto &t : tree[j])
-        {
             if (t.range._start < p_node->range._start)
                 continue;
-            if (t.range._end > p_node->range._end)
+            else if (t.range._end > p_node->range._end)
                 break;
-            if (t.token.getTokType() != p_node->token.getTokType() ||
+            else if (t.token.getTokType() != p_node->token.getTokType() ||
                 t.range != p_node->range)
             {
                 p_node->children.push_back(std::make_shared<ASTNode>(t));
                 flag_addChild = true;
             }
-        }
-        // std::cout << "build " << p_node->token.getTokType();
-        // std::cout << '{' << p_node->range._start << ',' << p_node->range._end << "}" << std::endl;
         if (flag_addChild)
-        {
             for (size_t i = 0; i < p_node->children.size(); ++i)
-            {
-                // std::cout << "push back " << tree[j][i].token.getTokType() << ", level = " << level << ", j = " << j << ", i = " << i << std::endl;
                 buildAST(tree, j, p_node->children[i], flag_addChild);
-            }   
-        }
         else
             buildAST(tree, j, p_node, flag_addChild);
     }
