@@ -18,6 +18,12 @@ struct Range
     }
 };
 
+template <typename type>
+static bool operator == (const Range<type> &range1, const Range<type> &range2)
+{
+    return range1._start == range2._start && range1._end == range2._end;
+}
+
 
 template <typename type>
 static std::vector<type> getSubVector(const std::vector<type> &vec, const size_t &_pos, const size_t &_size)

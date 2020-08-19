@@ -50,7 +50,7 @@ void test3()
         cout << "scope {" << endl << scope << endl << "} endscope" << endl;
         cout << endl;
         auto tokens = Lexer::lexStr(scope);
-        cout << "tokens:" << endl;
+        cout << "lexing:" << endl;
         for (const Token &tok : tokens)
             cout << "toktype = " << tok.getTokType() 
                 << ", tokval = " << tok.getTokStr() << endl;
@@ -58,11 +58,8 @@ void test3()
         vector<ASTNode> nodes;
         for (size_t i = 0; i < tokens.size(); ++i)
             nodes.push_back(ASTNode(tokens[i], {i, i + 1}));
-        cout << "ASTNodes:" << endl;
-        for (const auto &n : nodes)
-            std::cout << n.token.getTokType() << ' ';
-        std::cout << std::endl;
-        
+        cout << "parsing:" << endl;
         auto ast = ASTBuilder::buildAST(nodes);
+        dispDFS(ast, 0);
     }
 }
