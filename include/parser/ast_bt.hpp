@@ -90,8 +90,14 @@ public:
         return p_node;
     }
 
-    static std::shared_ptr<ASTNode> buildAST(std::vector<ASTNode> &nodes)
+    /**
+     * @brief 构造抽象语法树
+     */
+    static std::shared_ptr<ASTNode> buildAST(const std::vector<Token> &tokens)
     {
+        std::vector<ASTNode> nodes;
+        for (size_t i = 0; i < tokens.size(); ++i)
+            nodes.push_back(ASTNode(tokens[i], {i, i + 1}));
         std::shared_ptr<ASTNode> p_node;
         std::vector<std::vector<ASTNode>> tree;
         tree.clear();

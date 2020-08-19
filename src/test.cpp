@@ -55,11 +55,8 @@ void test3()
             cout << "toktype = " << tok.getTokType() 
                 << ", tokval = " << tok.getTokStr() << endl;
         cout << endl;
-        vector<ASTNode> nodes;
-        for (size_t i = 0; i < tokens.size(); ++i)
-            nodes.push_back(ASTNode(tokens[i], {i, i + 1}));
         cout << "parsing:" << endl;
-        auto ast = ASTBuilder::buildAST(nodes);
+        auto ast = ASTBuilder::buildAST(tokens);
         dispDFS(ast, 0);
     }
 }
