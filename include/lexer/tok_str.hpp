@@ -8,22 +8,30 @@ static const std::map<unsigned int, std::string> TokStrMap =
 {
     {TT_DEFAULT, "TOK_DEFAULT"},
     {NAME, "NAME"},
-    {TT_SEMI, "SEMI"},
+    {TT_SEMI, ";"},
     {TT_ASSIGN, "="},
     {TT_PARENTHESES_L, "("},
     {TT_PARENTHESES_R, ")"},
     {TT_BRACKET_L, "["},
     {TT_BRACKET_R, "]"},
+    {TT_BRACE_L, "{"},
+    {TT_BRACE_R, "}"},
     {ADD, "+"},
     {SUB, "-"},
     {MUL, "*"},
     {DIV, "/"},
     {INCREASE, "++"},
     {DECREASE, "--"},
+    {KEY_FOR, "for"},
+
     {expr, "expr"},
     {expr_const, "expr_const"},
     {expr_postfix, "expr_postfix"},
+    {expr_decl, "expr_decl"},
     {stmt_list, "stmt_list"},
+    {stmt_block, "stmt_block"},
     {stmt, "stmt"},
-    {root, "scope"}
+    {root, "scope"},
+    {forloop_meta, "forloop_meta"},
+    {forloop, "forloop"}
 };

@@ -7,12 +7,15 @@ enum ASTNodeType
 {
     root = TokType::LAST + 1,
     stmt_list = root + 1,
-    stmt = stmt_list + 1,
+    stmt_block = stmt_list + 1,
+    stmt = stmt_block + 1,
     expr = stmt + 1,
     expr_postfix = expr + 1,
     expr_const = expr_postfix + 1,
-    type_name = expr_const + 1,
-    last = expr_const + 1
+    expr_decl = expr_const + 1,
+    forloop_meta = expr_decl + 1,
+    forloop = forloop_meta + 1,
+    last = forloop + 1
 };
 /**
  * @brief node of AST

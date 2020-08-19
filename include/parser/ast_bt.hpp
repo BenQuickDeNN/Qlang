@@ -29,12 +29,18 @@ static const uint64_t getASTKey(const type tok, const types... toks)
 static const std::map<uint64_t, uint64_t> GrammarMap = {
     {getASTKey(stmt_list), root},
     {getASTKey(stmt_list, stmt), stmt_list},
+    {getASTKey(TT_BRACE_L, stmt_list, TT_BRACE_R), stmt_block},
     {getASTKey(stmt), stmt_list},
     {getASTKey(expr, TT_SEMI), stmt},
+    {getASTKey(stmt_block), stmt},
+    {getASTKey(forloop), stmt},
+    {getASTKey(TT_SEMI), stmt},
+    {getASTKey(stmt, TT_SEMI), stmt},
     
     {getASTKey(NAME), expr},
     {getASTKey(expr_const), expr},
     {getASTKey(expr, expr_postfix), expr},
+    {getASTKey(expr_decl), expr},
     {getASTKey(TT_BRACKET_L, expr, TT_BRACKET_R), expr_postfix},
     {getASTKey(TT_PARENTHESES_L, expr, TT_PARENTHESES_R), expr},
     {getASTKey(expr, INCREASE), expr},
@@ -49,20 +55,39 @@ static const std::map<uint64_t, uint64_t> GrammarMap = {
 
     {getASTKey(KEY_CONST, expr), expr_const},
     {getASTKey(INTEGER), expr_const},
-    {getASTKey(FLOAT_POINT), expr_const}
+    {getASTKey(FLOAT_POINT), expr_const},
+
+    {getASTKey(expr, expr), expr_decl},
+
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, expr, TT_PARENTHESES_R), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, TT_PARENTHESES_R), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, TT_SEMI, TT_PARENTHESES_R), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, expr, TT_SEMI, expr, TT_PARENTHESES_R, stmt), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, expr, TT_SEMI, TT_PARENTHESES_R), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), forloop_meta},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, TT_PARENTHESES_R), forloop_meta},
+
+    {getASTKey(forloop_meta, stmt), forloop}
 };
 
 // 优先级表
 static const std::map<uint64_t, uint64_t> PriorityMap = {
     
+    {getASTKey(stmt_list), 200},
     {getASTKey(expr, TT_SEMI), 100},
-    {getASTKey(stmt_list, stmt), 101},
-    {getASTKey(stmt), 102},
-    {getASTKey(stmt_list), 103},
+    {getASTKey(stmt_list, stmt), 107},
+    {getASTKey(TT_BRACE_L, stmt_list, TT_BRACE_R), 101},
+    {getASTKey(stmt), 108},
+    {getASTKey(stmt_block), 103},
+    {getASTKey(forloop), 103},
+    {getASTKey(TT_SEMI), 104},
+    {getASTKey(stmt, TT_SEMI), 106},
 
     {getASTKey(NAME), 1},
     {getASTKey(expr_const), 1},
     {getASTKey(expr, expr_postfix), 1},
+    {getASTKey(expr_decl), 1},
     {getASTKey(TT_BRACKET_L, expr, TT_BRACKET_R), 2},
     {getASTKey(expr, INCREASE), 3},
     {getASTKey(INCREASE, expr), 3},
@@ -77,7 +102,20 @@ static const std::map<uint64_t, uint64_t> PriorityMap = {
 
     {getASTKey(KEY_CONST, expr), 1},
     {getASTKey(INTEGER), 1},
-    {getASTKey(FLOAT_POINT), 1}
+    {getASTKey(FLOAT_POINT), 1},
+
+    {getASTKey(expr, expr), 20},
+
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, expr, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, TT_SEMI, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, expr, TT_SEMI, expr, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, expr, TT_SEMI, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), 40},
+    {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, TT_PARENTHESES_R), 40},
+
+    {getASTKey(forloop_meta, stmt), 41}
 };
 
 // symbol priority
@@ -111,9 +149,15 @@ public:
                 break;
         }
         if (tree.empty())
+        {
+            std::cerr << "parse error: tree is empty" << std::endl;
             return nullptr;
+        }
         if (tree.back().size() != 1)
-            return nullptr;
+        {
+            std::cerr << "parse error: tree.back().size() != 1" << std::endl;
+        //    return nullptr;
+        }
         // 打印语法推导过程
         for (int i = tree.size() - 1; i >= 0; --i)
         {

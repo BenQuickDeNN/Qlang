@@ -117,10 +117,30 @@ graph LR
 ## 文法
 采用自底向上LR文法
 ```
-root => stmt
+# 200
+root => stmt_list
+
+# 107
 stmt_list => stmt_list stmt
+
+# 101
+stmt_block => BRACE_L stmt_list BRACE_R
+
+# 108
 stmt_list => stmt
+
+# 103
 stmt => expr SEMI
+stmt => stmt_block
+stmt => forloop
+
+# 104
+stmt => SEMI
+
+# 106
+stmt => stmt SEMI
+
+
 
 # 表达式
 # 基本表达式 1
@@ -131,9 +151,12 @@ expr => expr POINT_TO expr
 expr => NAME
 expr => expr_const
 expr => expr expr_postfix
+expr => expr_decl
 # expr => MUL NAME # 指针
+
 # 后缀表达式 2
 expr_postfix => BRACKET_L expr BRACKET_R
+
 # 一元运算表达式 3
 expr => expr INCREASE
 expr => expr DECREASE
@@ -141,51 +164,77 @@ expr => INCREASE expr
 expr => DECREASE expr
 expr => NOT expr
 expr => BOOL_NOT expr
+
 # 强制类型表达式 4
 expr => PARENTHESES_L type_name PARENTHESES_R expr
 expr => PARENTHESES_L expr PARENTHESES_R
+
 # 乘除法 5
 expr => expr MUL expr
 expr => expr DIV expr
+
 # 加减法 6
 expr => expr ADD expr
 expr => expr SUB expr
+
 # 移位表达式 7
 expr => expr MOVE_L expr
 expr => expr MOVE_R expr
+
 # 关系运算表达式 8
 expr => expr ANGLE_BRACKET_L expr
 expr => expr ANGLE_BRACKET_R expr
 expr => expr LEQ expr
 expr => expr GEQ expr
+
 # 相等运算 9
 expr => expr EQUAL expr
 expr => expr NOT_EQUAL expr
+
 # 位与运算 10
 expr => expr AND expr
+
 # 位异或运算 11
 expr => expr XOR expr
+
 # 位或运算 12
 expr => expr OR expr
+
 # 逻辑与运算 13
 expr => expr BOOL_AND expr
+
 # 逻辑或运算 14
 expr => expr BOOL_OR expr
+
 # 三元条件运算 15
 expr => expr QUES expr COLON expr
+
 # 赋值运算 16
 expr => expr ASSIGN expr
 ...
+
 # 逗号运算符 17
 expr => expr COMMA expr
 
-# 常量表达式
+# 常量表达式 1
 expr_const => CONST expr
 expr_const => INTEGER
 expr_const => FLOAT_POINT
 
-# 类型
-type_name => type_name ANGLE_BRACKET_L type_name ANGLE_BRACKET_R
-type_name => type_name COLON2 type_name
-type_name => NAME
+# 声明语句 20
+expr_decl => expr expr
+
+# for循环元信息 40
+forloop_meta => FOR PARENTHESES_L expr SEMI expr SEMI expr PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L expr SEMI expr SEMI PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L expr SEMI SEMI expr PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L expr SEMI SEMI PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L SEMI expr SEMI expr PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L SEMI expr SEMI PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L SEMI SEMI expr PARENTHESES_R
+forloop_meta => FOR PARENTHESES_L SEMI SEMI PARENTHESES_R
+
+# for循环 41
+forloop => forloop_meta stmt
+
 ```
