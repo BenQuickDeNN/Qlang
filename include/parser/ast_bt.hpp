@@ -51,6 +51,10 @@ static const std::map<uint64_t, uint64_t> GrammarMap = {
     {getASTKey(expr, DIV, expr), expr},
     {getASTKey(expr, ADD, expr), expr},
     {getASTKey(expr, SUB, expr), expr},
+    {getASTKey(expr, TT_ANGLE_BRACKET_L, expr), expr},
+    {getASTKey(expr, TT_ANGLE_BRACKET_R, expr), expr},
+    {getASTKey(expr, LEQ, expr), expr},
+    {getASTKey(expr, GEQ, expr), expr},
     {getASTKey(expr, TT_ASSIGN, expr), expr},
 
     {getASTKey(KEY_CONST, expr), expr_const},
@@ -98,6 +102,10 @@ static const std::map<uint64_t, uint64_t> PriorityMap = {
     {getASTKey(expr, DIV, expr), 5},
     {getASTKey(expr, ADD, expr), 6},
     {getASTKey(expr, SUB, expr), 6},
+    {getASTKey(expr, TT_ANGLE_BRACKET_L, expr), 8},
+    {getASTKey(expr, TT_ANGLE_BRACKET_R, expr), 8},
+    {getASTKey(expr, LEQ, expr), 8},
+    {getASTKey(expr, GEQ, expr), 8},
     {getASTKey(expr, TT_ASSIGN, expr), 9},
 
     {getASTKey(KEY_CONST, expr), 1},
@@ -189,8 +197,8 @@ private:
     {
         uint64_t key;
         uint64_t priority;
-        Range<size_t> range;
-        Range<size_t> range_real;
+        Range<size_t> range; // node的range
+        Range<size_t> range_real; // 对应token的range
     };
 
     static void updateBuffs(std::vector<ASTNodeBuff> &buffs, const std::vector<ASTNode> &nodes)

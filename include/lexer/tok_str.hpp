@@ -23,6 +23,10 @@ static const std::map<unsigned int, std::string> TokStrMap =
     {INCREASE, "++"},
     {DECREASE, "--"},
     {KEY_FOR, "for"},
+    {TT_ANGLE_BRACKET_L, "<"},
+    {TT_ANGLE_BRACKET_R, ">"},
+    {LEQ, "<="},
+    {GEQ, ">="},
 
     {expr, "expr"},
     {expr_const, "expr_const"},
