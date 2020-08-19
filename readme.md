@@ -129,8 +129,9 @@ expr => expr DOT expr
 expr => expr COLON2 expr
 expr => expr POINT_TO expr
 expr => NAME
-expr => MUL expr
 expr => expr_const
+expr => expr expr_postfix
+# expr => MUL NAME # 指针
 # 后缀表达式 2
 expr_postfix => BRACKET_L expr BRACKET_R
 # 一元运算表达式 3
@@ -142,6 +143,7 @@ expr => NOT expr
 expr => BOOL_NOT expr
 # 强制类型表达式 4
 expr => PARENTHESES_L type_name PARENTHESES_R expr
+expr => PARENTHESES_L expr PARENTHESES_R
 # 乘除法 5
 expr => expr MUL expr
 expr => expr DIV expr
