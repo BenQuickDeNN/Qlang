@@ -56,7 +56,7 @@ static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> Gram
             // 加减法 优先级=6
             // {ASTNodeType::expr, TokType::ADD, ASTNodeType::expr},
             // {ASTNodeType::expr, TokType::SUB, ASTNodeType::expr},
-            {ASTNodeType::expr, TokType::OP_LEVEL_6, ASTNodeType::expr},
+            // {ASTNodeType::expr, TokType::OP_LEVEL_6, ASTNodeType::expr},
 
             // 赋值运算 优先级=16
             {ASTNodeType::expr, TokType::TT_ASSIGN, ASTNodeType::expr}
@@ -76,8 +76,8 @@ static ASTNode BuildAST(const std::vector<Token> &tokens)
     {
         auto tt = tokens[i].getTokType();
         _tokens[i] = tokens[i];
-        if (tt == TokType::ADD || tt == TokType::SUB)
-            _tokens[i].setTokType(TokType::OP_LEVEL_6);
+        //if (tt == TokType::ADD || tt == TokType::SUB)
+            //_tokens[i].setTokType(TokType::OP_LEVEL_6);
     }
     size_t right = tokens.size();
     Token tok_root((TokType)ASTNodeType::root);

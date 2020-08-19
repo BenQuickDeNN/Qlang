@@ -145,10 +145,8 @@ expr => PARENTHESES_L type_name PARENTHESES_R expr
 expr => expr MUL expr
 expr => expr DIV expr
 # 加减法 6
-expr => expr OP_LEVEL_6 expr
-OP_LEVEL_6 : ADD|SUB
-# expr => expr ADD expr
-# expr => expr SUB expr
+expr => expr ADD expr
+expr => expr SUB expr
 # 移位表达式 7
 expr => expr MOVE_L expr
 expr => expr MOVE_R expr

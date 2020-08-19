@@ -24,19 +24,28 @@ static const uint64_t getASTKey(const type tok, const types... toks)
     return getASTKey(tok) + last * getASTKey(toks...);
 }
 
+// 生成规则表
 static const std::map<uint64_t, uint64_t> GrammarMap = {
+    {getASTKey(stmt), root},
     {getASTKey(NAME), expr},
+    {getASTKey(expr, MUL, expr), expr},
+    {getASTKey(expr, DIV, expr), expr},
+    {getASTKey(expr, ADD, expr), expr},
+    {getASTKey(expr, SUB, expr), expr},
     {getASTKey(expr, TT_ASSIGN, expr), expr},
-    {getASTKey(expr, TT_SEMI), stmt},
-    {getASTKey(stmt), root}
+    {getASTKey(expr, TT_SEMI), stmt}
 };
 
 // 优先级表
 static const std::map<uint64_t, uint64_t> PriorityMap = {
+    {getASTKey(stmt), 0},
     {getASTKey(NAME), 1},
+    {getASTKey(expr, MUL, expr), 5},
+    {getASTKey(expr, DIV, expr), 5},
+    {getASTKey(expr, ADD, expr), 6},
+    {getASTKey(expr, SUB, expr), 6},
     {getASTKey(expr, TT_ASSIGN, expr), 16},
-    {getASTKey(expr, TT_SEMI), 100},
-    {getASTKey(stmt), 101}
+    {getASTKey(expr, TT_SEMI), 100}
 };
 
 // symbol priority
@@ -45,51 +54,6 @@ static const std::map<uint64_t, uint64_t> PriorityMap = {
 class ASTBuilder
 {
 public:
-    /**
-     * @note this procedure updates tokens
-     */
-    static std::shared_ptr<ASTNode> genNode(std::vector<ASTNode> &nodes)
-    {
-        ASTNodeBuff buff;
-        std::vector<ASTNodeBuff> buffs;
-        for (size_t left = 0; left < nodes.size(); ++left)
-            for (size_t right = left + 1; right <= nodes.size(); ++right)
-            {
-                auto key = getASTKeyRange(nodes, {left, right});
-                auto it = GrammarMap.find(key);
-                if (it != GrammarMap.end())
-                {
-                    auto it_pri = PriorityMap.find(key);
-                    if (it_pri != PriorityMap.end())
-                    {
-                        buff.key = key;
-                        buff.priority = it_pri->second;
-                        buff.range = {left, right};
-                        buffs.emplace_back(buff);
-                    }
-                }
-            }
-        if (buffs.empty())
-        {
-            std::cout << "buffs is empty" << std::endl;
-            return nullptr;
-        }
-        static std::shared_ptr<ASTNode> p_node = std::make_shared<ASTNode>();
-        // sort buffs
-        std::sort(buffs.begin(), buffs.end(), cmp_astNodeBuff);
-        buff = buffs[0];
-        // generate p_node
-        p_node->token.setTokType((TokType)GrammarMap.find(buff.key)->second);
-        p_node->range = buff.range;
-        p_node->children.clear();
-        for (size_t i = buff.range._start; i < buff.range._end; ++i)
-            p_node->children.emplace_back(std::make_shared<ASTNode>(ASTNode(nodes[i].token, nodes[i].range)));
-        // update tokens
-        nodes.erase(nodes.begin() + buff.range._start + 1, nodes.begin() + buff.range._end);
-        nodes[buff.range._start] = *p_node;
-        return p_node;
-    }
-
     /**
      * @brief 构造抽象语法树
      */
@@ -123,12 +87,13 @@ public:
             for (auto &n : tree[i])
             {
                 std::cout << n.token.getTokType();
-                std::cout << '{' << n.range._start << ',' << n.range._end << "} ";
+                std::cout << '{' << n.range._start << ',' << n.range._end << "}";
+                std::cout << ' ';
             }
             std::cout << std::endl;
         }
         p_node = std::make_shared<ASTNode>(tree.back().front());
-        buildAST(tree, (int)tree.size() - 2, p_node);
+        buildAST(tree, tree.size() - 1, p_node, true);
         std::cout << "AST is built" << std::endl;
         return p_node;
     }
@@ -138,7 +103,34 @@ private:
         uint64_t key;
         uint64_t priority;
         Range<size_t> range;
+        Range<size_t> range_real;
     };
+
+    static void updateBuffs(std::vector<ASTNodeBuff> &buffs, const std::vector<ASTNode> &nodes)
+    {
+        ASTNodeBuff buff;
+        size_t start, end;
+        for (size_t left = 0; left < nodes.size(); ++left)
+            for (size_t right = left + 1; right <= nodes.size(); ++right)
+            {
+                auto key = getASTKeyRange(nodes, {left, right});
+                auto it = GrammarMap.find(key);
+                if (it != GrammarMap.end())
+                {
+                    auto it_pri = PriorityMap.find(key);
+                    if (it_pri != PriorityMap.end())
+                    {
+                        buffs.emplace_back(ASTNodeBuff());
+                        buffs.back().key = key;
+                        buffs.back().priority = it_pri->second;
+                        buffs.back().range = {left, right};
+                        buffs.back().range_real = {nodes[left].range._start, nodes[right - 1].range._end};
+                    }
+                }
+            }
+        // sort buffs
+        std::sort(buffs.begin(), buffs.end(), cmp_astNodeBuff);
+    }
 
     /**
      * @brief comparator for ASTNodeBuff
@@ -146,6 +138,29 @@ private:
     static bool cmp_astNodeBuff(const ASTNodeBuff &a, const ASTNodeBuff &b)
     {
         return a.priority < b.priority;
+    }
+
+    /**
+     * @note this procedure updates tokens
+     */
+    static std::shared_ptr<ASTNode> genNode(std::vector<ASTNode> &nodes)
+    {
+        std::vector<ASTNodeBuff> buffs;
+        updateBuffs(buffs, nodes);
+        if (buffs.empty())
+        {
+            std::cout << "buffs is empty" << std::endl;
+            return nullptr;
+        }
+        const ASTNodeBuff &buff = buffs.front();
+        // generate p_node
+        static std::shared_ptr<ASTNode> p_node = std::make_shared<ASTNode>();
+        p_node->token.setTokType((TokType)GrammarMap.find(buff.key)->second);
+        p_node->range = buff.range_real;
+        // update tokens
+        nodes.erase(nodes.begin() + buff.range._start + 1, nodes.begin() + buff.range._end);
+        nodes[buff.range._start] = *p_node;
+        return p_node;
     }
 
     static uint64_t getASTKeyRange(const std::vector<ASTNode> &nodes, Range<size_t> range)
@@ -160,28 +175,44 @@ private:
         return sum;
     }
 
-    static void buildAST(const std::vector<std::vector<ASTNode>> &tree, const int &level, std::shared_ptr<ASTNode> &p_node)
+    static void buildAST(const std::vector<std::vector<ASTNode>> &tree, 
+        const int &level, std::shared_ptr<ASTNode> &p_node, 
+        const bool &addChild)
     {
         if (p_node == nullptr)
             return;
-        p_node->children.clear();
-        if (level < 0)
+        if (addChild)
+            p_node->children.clear();
+        if (level < 1)
             return;
         if (!p_node->isNonterminal())
             return;
+        const int j = level - 1;
         bool flag_addChild = false;
-        for (size_t i = p_node->range._start; i < p_node->range._end; ++i)
+        for (auto &t : tree[j])
         {
-            if (!(tree[level][i].token.getTokType() == p_node->token.getTokType() &&
-                tree[level][i].range == p_node->range))
+            if (t.range._start < p_node->range._start)
+                continue;
+            if (t.range._end > p_node->range._end)
+                break;
+            if (t.token.getTokType() != p_node->token.getTokType() ||
+                t.range != p_node->range)
             {
-                p_node->children.push_back(std::make_shared<ASTNode>(tree[level][i]));
+                p_node->children.push_back(std::make_shared<ASTNode>(t));
                 flag_addChild = true;
             }
-            if (flag_addChild)
-                buildAST(tree, level - 1, p_node->children.back());
-            else
-                buildAST(tree, level - 1, p_node);
         }
+        // std::cout << "build " << p_node->token.getTokType();
+        // std::cout << '{' << p_node->range._start << ',' << p_node->range._end << "}" << std::endl;
+        if (flag_addChild)
+        {
+            for (size_t i = 0; i < p_node->children.size(); ++i)
+            {
+                // std::cout << "push back " << tree[j][i].token.getTokType() << ", level = " << level << ", j = " << j << ", i = " << i << std::endl;
+                buildAST(tree, j, p_node->children[i], flag_addChild);
+            }   
+        }
+        else
+            buildAST(tree, j, p_node, flag_addChild);
     }
 };
