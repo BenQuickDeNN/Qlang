@@ -31,7 +31,7 @@ struct ASTNode
     /**
      * @brief check is nonterminal symbol
      */
-    bool isNonterminal()
+    bool isNonterminal() noexcept
     {
         auto toktype = (ASTNodeType)token.getTokType();
         return toktype < ASTNodeType::last && 

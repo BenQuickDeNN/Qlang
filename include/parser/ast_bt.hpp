@@ -91,7 +91,7 @@ private:
         Range<size_t> range_real; // 对应token的range
     };
 
-    static void updateBuffs(std::vector<ASTNodeBuff> &buffs, const std::vector<ASTNode> &nodes)
+    static void updateBuffs(std::vector<ASTNodeBuff> &buffs, const std::vector<ASTNode> &nodes) noexcept
     {
         ASTNodeBuff buff;
         size_t start, end;
@@ -127,7 +127,7 @@ private:
     /**
      * @note this procedure updates tokens
      */
-    static std::shared_ptr<ASTNode> genNode(std::vector<ASTNode> &nodes)
+    static std::shared_ptr<ASTNode> genNode(std::vector<ASTNode> &nodes) noexcept
     {
         std::vector<ASTNodeBuff> buffs;
         updateBuffs(buffs, nodes);
@@ -147,7 +147,7 @@ private:
         return p_node;
     }
 
-    static uint64_t getASTKeyRange(const std::vector<ASTNode> &nodes, Range<size_t> range)
+    static uint64_t getASTKeyRange(const std::vector<ASTNode> &nodes, Range<size_t> range) noexcept
     {
         uint64_t sum = 0;
         uint64_t tmp = last;

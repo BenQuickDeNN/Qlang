@@ -159,7 +159,7 @@ enum CharType
     CT_POUND
 };
 
-static CharType getCharType(const char &c)
+static CharType getCharType(const char &c) noexcept
 {
 
     if (std::isalpha(c))
@@ -286,19 +286,23 @@ public:
     Token() {}
     Token(const TokType &tok_type) : tok_type(tok_type) {}
     Token(const std::string &tok_str, const TokType &tok_type) : tok_str(tok_str), tok_type(tok_type) {}
-    std::string getTokStr() const {
+    std::string getTokStr() const noexcept 
+    {
         return tok_str;
     }
-    void setTokStr(const std::string &tok_str) {
+    void setTokStr(const std::string &tok_str) noexcept
+    {
         this->tok_str = tok_str;
     }
-    TokType getTokType() const {
+    TokType getTokType() const noexcept
+    {
         return tok_type;
     }
-    void setTokType(const TokType &tok_type) {
+    void setTokType(const TokType &tok_type) noexcept
+    {
         this->tok_type = tok_type;
     }
-    static bool isToken(const unsigned int &tok)
+    static bool isToken(const unsigned int &tok) noexcept
     {
         return tok >= TokType::TT_DEFAULT && tok < TokType::LAST;
     }

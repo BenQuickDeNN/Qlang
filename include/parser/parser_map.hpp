@@ -5,13 +5,13 @@
 #include "ast_node.hpp"
 
 template <typename type = uint64_t>
-static const uint64_t getASTKey(const type tok)
+static const uint64_t getASTKey(const type tok) noexcept
 {
     return last * tok;
 }
 
 template <typename type = uint64_t, typename... types>
-static const uint64_t getASTKey(const type tok, const types... toks)
+static const uint64_t getASTKey(const type tok, const types... toks) noexcept
 {
     return getASTKey(tok) + last * getASTKey(toks...);
 }

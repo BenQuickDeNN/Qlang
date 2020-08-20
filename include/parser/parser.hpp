@@ -7,7 +7,7 @@
 /**
  * @brief display tree structure in DFS order
  */
-void dispDFS(const std::shared_ptr<ASTNode> p_node, const size_t &depth)
+void dispDFS(const std::shared_ptr<ASTNode> p_node, const size_t &depth) noexcept
 {
     if (depth == 0)
         std::cout << "view tree:" << std::endl;

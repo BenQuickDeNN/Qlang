@@ -523,7 +523,7 @@ public:
     /**
      * @brief 检查某个字符串是否是关键字
      */
-    static bool isKeyWord(const std::string &str)
+    static bool isKeyWord(const std::string &str) noexcept
     {
         return KEY_WORDS.find(str) != KEY_WORDS.end();
     }
@@ -532,13 +532,13 @@ public:
      * @brief 判断索引是否要减一
      */
     template <typename type, typename... types>
-    static bool checkBackward(const type &ct, const type &ctype, types... args)
+    static bool checkBackward(const type &ct, const type &ctype, types... args) noexcept
     {
         return checkBackward(ct, ctype) || checkBackward(ct, args...);
     }
 
 private:
-    static bool checkBackward(const CharType &ct, const CharType &ctype)
+    static bool checkBackward(const CharType &ct, const CharType &ctype) noexcept
     {
         return ct == ctype;
     }
