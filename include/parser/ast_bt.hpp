@@ -14,6 +14,13 @@
 
 class ASTBuilder
 {
+#if defined(USE_C_STD_GRAMMAR)
+    const std::map<uint64_t, std::pair<uint64_t, uint64_t>>& GMap = GrammarCMap;
+#elif defined(USE_CPP_STD_GRAMMAR)
+    const std::map<uint64_t, std::pair<uint64_t, uint64_t>>& GMap = GrammarCppMap;
+#else
+    const std::map<uint64_t, std::pair<uint64_t, uint64_t>>& GMap = GrammarMap;
+#endif
 public:
     /**
      * @brief 构造抽象语法树
@@ -95,15 +102,11 @@ private:
                 auto it = GrammarMap.find(key);
                 if (it != GrammarMap.end())
                 {
-                    auto it_pri = PriorityMap.find(key);
-                    if (it_pri != PriorityMap.end())
-                    {
-                        buffs.emplace_back(ASTNodeBuff());
-                        buffs.back().key = key;
-                        buffs.back().priority = it_pri->second;
-                        buffs.back().range = {left, right};
-                        buffs.back().range_real = {nodes[left].range._start, nodes[right - 1].range._end};
-                    }
+                    buffs.emplace_back(ASTNodeBuff());
+                    buffs.back().key = key;
+                    buffs.back().priority = it->second.second;
+                    buffs.back().range = {left, right};
+                    buffs.back().range_real = {nodes[left].range._start, nodes[right - 1].range._end};
                 }
             }
         // sort buffs
@@ -136,7 +139,7 @@ private:
         const ASTNodeBuff &buff = buffs.front();
         // generate p_node
         static std::shared_ptr<ASTNode> p_node = std::make_shared<ASTNode>();
-        p_node->token.setTokType((TokType)GrammarMap.find(buff.key)->second);
+        p_node->token.setTokType((TokType)GrammarMap.find(buff.key)->second.first);
         p_node->range = buff.range_real;
         // update tokens
         nodes.erase(nodes.begin() + buff.range._start + 1, nodes.begin() + buff.range._end);

@@ -38,7 +38,7 @@ void test2()
 {
     for (const auto &tuple : GrammarMap)
     {
-        cout << "key = " << tuple.first << ", value = " << tuple.second << endl;
+        cout << "key = " << tuple.first << ", value = " << tuple.second.first << endl;
     }
 }
 void test3()
