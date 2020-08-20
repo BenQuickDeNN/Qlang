@@ -115,7 +115,7 @@ graph LR
 
 # Parser
 ## 文法
-采用自底向上，上下文无关文法
+采用自底向上f分析，上下文无关文法
 ```
 # 200
 root => stmt_list
@@ -164,10 +164,11 @@ expr => INCREASE expr
 expr => DECREASE expr
 expr => NOT expr
 expr => BOOL_NOT expr
-
 # 以下一元运算表达式，要求运算符左边不能有表达式，扫描时须往左看1个token
-expr => (not expr) MUL expr # 提领指针
-expr => (not expr) AND expr # 引用
+# expr => (no expr) MUL expr # 提领指针
+# expr => (no expr) AND expr # 引用
+# expr => (no expr) ADD expr # 正数
+# expr => (no expr) SUB expr # 负数
 
 # 强制类型表达式 4
 # expr => PARENTHESES_L type_name PARENTHESES_R expr
