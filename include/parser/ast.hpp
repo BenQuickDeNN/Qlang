@@ -51,7 +51,7 @@ static const std::map<unsigned int, std::vector<std::vector<unsigned int>>> Gram
             {TokType::BOOL_NOT, ASTNodeType::expr},
 
             // 强制类型表达式 优先级=4
-            {TokType::TT_PARENTHESES_L, ASTNodeType::type_name, TokType::TT_PARENTHESES_R, ASTNodeType::expr},
+            // {TokType::TT_PARENTHESES_L, ASTNodeType::type_name, TokType::TT_PARENTHESES_R, ASTNodeType::expr},
             // 乘除法 优先级=5
             // 加减法 优先级=6
             // {ASTNodeType::expr, TokType::ADD, ASTNodeType::expr},
