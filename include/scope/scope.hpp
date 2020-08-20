@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 #include "../lexer/token.hpp"
-static bool checkStr(const std::string &line, const std::string &str)
+static bool checkStr(const std::string &line, const std::string &str) noexcept
 {
     size_t left = line.find(str);
     if (left == line.npos) 
@@ -24,7 +24,7 @@ static bool checkStr(const std::string &line, const std::string &str)
 /**
  * @brief 获取字符串中 #pragma scope 与 #pragma endscop 之间的 字符串
  */
-static std::vector<std::string> getScopes(const std::string &str)
+static std::vector<std::string> getScopes(const std::string &str) noexcept
 {
     std::string line = "";
     std::vector<std::string> ret;
