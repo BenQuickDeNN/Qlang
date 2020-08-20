@@ -144,7 +144,6 @@ stmt => stmt SEMI
 
 # 表达式
 # 基本表达式 1
-expr => PARENTHESES_L expr PARENTHESES_R
 expr => expr DOT expr
 expr => expr COLON2 expr
 expr => expr POINT_TO expr
@@ -166,7 +165,7 @@ expr => NOT expr
 expr => BOOL_NOT expr
 
 # 强制类型表达式 4
-expr => PARENTHESES_L type_name PARENTHESES_R expr
+# expr => PARENTHESES_L type_name PARENTHESES_R expr
 expr => PARENTHESES_L expr PARENTHESES_R
 
 # 乘除法 5

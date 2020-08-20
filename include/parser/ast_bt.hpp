@@ -27,6 +27,7 @@ static const uint64_t getASTKey(const type tok, const types... toks)
 
 // 生成规则表
 static const std::map<uint64_t, uint64_t> GrammarMap = {
+    // common
     {getASTKey(stmt_list), root},
     {getASTKey(stmt_list, stmt), stmt_list},
     {getASTKey(TT_BRACE_L, stmt_list, TT_BRACE_R), stmt_block},
@@ -37,32 +38,48 @@ static const std::map<uint64_t, uint64_t> GrammarMap = {
     {getASTKey(TT_SEMI), stmt},
     {getASTKey(stmt, TT_SEMI), stmt},
     
+    // 基本表达式
     {getASTKey(NAME), expr},
     {getASTKey(expr_const), expr},
     {getASTKey(expr_postfix, expr, TT_BRACKET_R), expr},
     {getASTKey(expr_decl), expr},
+
+    // 后缀表达式 2
     {getASTKey(expr, TT_BRACKET_L), expr_postfix},
-    {getASTKey(TT_PARENTHESES_L, expr, TT_PARENTHESES_R), expr},
+
+    // 一元运算表达式 3
     {getASTKey(expr, INCREASE), expr},
     {getASTKey(INCREASE, expr), expr},
     {getASTKey(expr, DECREASE), expr},
     {getASTKey(DECREASE, expr), expr},
+
+    // 强制类型表达式 4
+    {getASTKey(TT_PARENTHESES_L, expr, TT_PARENTHESES_R), expr},
+
+    // 乘除法 5
     {getASTKey(expr, MUL, expr), expr},
     {getASTKey(expr, DIV, expr), expr},
+
+    // 加减法 6
     {getASTKey(expr, ADD, expr), expr},
     {getASTKey(expr, SUB, expr), expr},
+
+    // 关系运算表达式 8
     {getASTKey(expr, TT_ANGLE_BRACKET_L, expr), expr},
     {getASTKey(expr, TT_ANGLE_BRACKET_R, expr), expr},
     {getASTKey(expr, LEQ, expr), expr},
     {getASTKey(expr, GEQ, expr), expr},
     {getASTKey(expr, TT_ASSIGN, expr), expr},
 
+    // 常量表达式 1
     {getASTKey(KEY_CONST, expr), expr_const},
     {getASTKey(INTEGER), expr_const},
     {getASTKey(FLOAT_POINT), expr_const},
 
+    // 声明语句
     {getASTKey(expr, expr), expr_decl},
 
+    // for循环元信息
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, expr, TT_PARENTHESES_R), forloop_meta},
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, TT_PARENTHESES_R), forloop_meta},
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), forloop_meta},
@@ -72,12 +89,13 @@ static const std::map<uint64_t, uint64_t> GrammarMap = {
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), forloop_meta},
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, TT_PARENTHESES_R), forloop_meta},
 
+    // for循环
     {getASTKey(forloop_meta, stmt), forloop}
 };
 
 // 优先级表
 static const std::map<uint64_t, uint64_t> PriorityMap = {
-    
+    // common
     {getASTKey(stmt_list), 200},
     {getASTKey(expr, TT_SEMI), 100},
     {getASTKey(stmt_list, stmt), 107},
@@ -88,32 +106,50 @@ static const std::map<uint64_t, uint64_t> PriorityMap = {
     {getASTKey(TT_SEMI), 104},
     {getASTKey(stmt, TT_SEMI), 106},
 
+    // 基本表达式 1
     {getASTKey(NAME), 1},
     {getASTKey(expr_const), 1},
     {getASTKey(expr_postfix, expr, TT_BRACKET_R), 1},
     {getASTKey(expr_decl), 1},
+
+    // 后缀表达式 2
     {getASTKey(expr, TT_BRACKET_L), 2},
+
+    // 一元运算表达式 3
     {getASTKey(expr, INCREASE), 3},
     {getASTKey(INCREASE, expr), 3},
     {getASTKey(expr, DECREASE), 3},
     {getASTKey(DECREASE, expr), 3},
+
+    // 强制类型表达式 4
     {getASTKey(TT_PARENTHESES_L, expr, TT_PARENTHESES_R), 4},
+
+    // 乘除法 5
     {getASTKey(expr, MUL, expr), 5},
     {getASTKey(expr, DIV, expr), 5},
+
+    // 加减法 6
     {getASTKey(expr, ADD, expr), 6},
     {getASTKey(expr, SUB, expr), 6},
+
+    // 关系运算表达式 8
     {getASTKey(expr, TT_ANGLE_BRACKET_L, expr), 8},
     {getASTKey(expr, TT_ANGLE_BRACKET_R, expr), 8},
     {getASTKey(expr, LEQ, expr), 8},
     {getASTKey(expr, GEQ, expr), 8},
-    {getASTKey(expr, TT_ASSIGN, expr), 9},
 
+    // 赋值运算 16
+    {getASTKey(expr, TT_ASSIGN, expr), 16},
+
+    // 常量表达式 1
     {getASTKey(KEY_CONST, expr), 1},
     {getASTKey(INTEGER), 1},
     {getASTKey(FLOAT_POINT), 1},
 
+    // 声明语句 20
     {getASTKey(expr, expr), 20},
 
+    // for循环元信息
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, expr, TT_PARENTHESES_R), 40},
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, expr, TT_SEMI, TT_PARENTHESES_R), 40},
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, expr, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), 40},
@@ -123,11 +159,9 @@ static const std::map<uint64_t, uint64_t> PriorityMap = {
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, expr, TT_PARENTHESES_R), 40},
     {getASTKey(KEY_FOR, TT_PARENTHESES_L, TT_SEMI, TT_SEMI, TT_PARENTHESES_R), 40},
 
+    // for循环
     {getASTKey(forloop_meta, stmt), 41}
 };
-
-// symbol priority
-
 
 class ASTBuilder
 {
