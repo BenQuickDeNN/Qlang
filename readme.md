@@ -115,7 +115,7 @@ graph LR
 
 # Parser
 ## 文法
-采用自底向上LR文法
+采用自底向上，上下文无关文法
 ```
 # 200
 root => stmt_list
@@ -144,33 +144,39 @@ stmt => stmt SEMI
 
 # 表达式
 # 基本表达式 1
-expr => expr DOT expr
-expr => expr COLON2 expr
-expr => expr POINT_TO expr
 expr => NAME
 expr => expr_const
 expr => expr_postfix expr BRACKET_R
+# expr => expr_postfix expr PARENTHESES_R
 expr => expr_decl
-# expr => MUL NAME # 指针
 
 # 后缀表达式 2
 expr_postfix => expr BRACKET_L
-
-# 一元运算表达式 3
+# expr_postfix => expr PARENTHESES_L
 expr => expr INCREASE
 expr => expr DECREASE
+# expr => expr POINT_TO expr
+# expr => expr DOT expr
+# expr => expr COLON2 NAME
+
+# 一元运算表达式 3
 expr => INCREASE expr
 expr => DECREASE expr
 expr => NOT expr
 expr => BOOL_NOT expr
 
+# 以下一元运算表达式，要求运算符左边不能有表达式，扫描时须往左看1个token
+expr => (not expr) MUL expr # 提领指针
+expr => (not expr) AND expr # 引用
+
 # 强制类型表达式 4
 # expr => PARENTHESES_L type_name PARENTHESES_R expr
 expr => PARENTHESES_L expr PARENTHESES_R
 
-# 乘除法 5
+# 乘除法 取模 5
 expr => expr MUL expr
 expr => expr DIV expr
+expr => expr MOD expr
 
 # 加减法 6
 expr => expr ADD expr
@@ -210,6 +216,10 @@ expr => expr QUES expr COLON expr
 
 # 赋值运算 16
 expr => expr ASSIGN expr
+expr => expr ASSIGN_ADD expr
+expr => expr ASSIGN_SUB expr
+expr => expr ASSIGN_MUL expr
+expr => expr ASSIGN_DIV expr
 ...
 
 # 逗号运算符 17
