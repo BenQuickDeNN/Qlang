@@ -43,7 +43,7 @@ void test2()
 }
 void test3()
 {
-    string text = readStrFromFile("examples/jacobi-1d.cpp");
+    string text = readStrFromFile("examples/jacobi-2d.cpp");
     auto scopes = getScopes(text);
     for (const auto &scope : scopes)
     {
@@ -59,5 +59,9 @@ void test3()
         cout << "--------------------------------------------parsing--------------------------------------------" << endl;
         auto ast = ASTBuilder::buildAST(tokens);
         dispDFS(ast, 0);
+        ASTList astlist;
+        astlist.getDataFromAST(ast);
+        cout << endl;
+        cout << astlist.toString() << endl;
     }
 }

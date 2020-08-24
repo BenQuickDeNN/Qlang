@@ -7,7 +7,11 @@
 static const std::map<unsigned int, std::string> TokStrMap = 
 {
     {TT_DEFAULT, "TOK_DEFAULT"},
+
     {NAME, "NAME"},
+    {INTEGER, "INTEGER"},
+    {FLOAT_POINT, "FLOAT_POINT"},
+
     {TT_SEMI, ";"},
     {TT_ASSIGN, "="},
     {TT_PARENTHESES_L, "("},

@@ -2,6 +2,7 @@
 // #include "ast.hpp"
 #include "ast_bt.hpp"
 #include "ast_node.hpp"
+#include "ast_list.hpp"
 #include "../lexer/tok_str.hpp"
 
 /**

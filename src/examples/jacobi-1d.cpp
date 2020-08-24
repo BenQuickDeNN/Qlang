@@ -10,7 +10,7 @@ int main()
     *p = d * *p;
 #pragma scope
     /* single-step jacobi-2d demo */
-    for (size_t i = 1; i < I - 1; ++i)
+    for (size_t i = 1; i < 9; ++i)
     {
         b[i] = 0.5 * (a[i-1] + a[i+1]);
     }
