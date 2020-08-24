@@ -4,6 +4,7 @@
 #include "scope/scope.hpp"
 #include "lexer/lexer.hpp"
 #include "parser/parser.hpp"
+#include "forloop/forloop.hpp"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ void test2()
 }
 void test3()
 {
-    string text = readStrFromFile("examples/jacobi-2d.cpp");
+    string text = readStrFromFile("examples/jacobi-1d.cpp");
     auto scopes = getScopes(text);
     for (const auto &scope : scopes)
     {
@@ -63,5 +64,9 @@ void test3()
         astlist.getDataFromAST(ast);
         cout << endl;
         cout << astlist.toString() << endl;
+        cout << endl;
+        cout << "Forloop:" << endl;
+        ForLoop _loop(astlist);
+        cout << _loop.toString() << endl;
     }
 }
