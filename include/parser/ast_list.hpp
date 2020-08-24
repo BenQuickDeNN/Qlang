@@ -26,7 +26,7 @@ public:
         data.emplace_back(astline);
         return data.size() - 1;
     }
-    std::string toString()
+    std::string toString() noexcept
     {
         std::string ret = "ASTList:\n";
         ret += "index\ttoktype\tvalue\texpansions\n";
