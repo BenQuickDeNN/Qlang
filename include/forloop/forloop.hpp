@@ -94,8 +94,13 @@ private:
         // range 的获取非常复杂
         // find range start
         std::shared_ptr<ASTLine> p_range1 = std::make_shared<ASTLine>(astlist.data[p_line->expansion.back()]);
+        // range暂时只支持立即数
+        if (p_range1->expansion.size() != 1)
+            return;
         while (!p_range1->expansion.empty())
             p_range1 = std::make_shared<ASTLine>(astlist.data[p_range1->expansion.back()]);
+        if (p_range1->key.token.getTokType() != INTEGER)
+            return;
         range._start = p_range1->key.token.getTokStr();
 
         // check block2
@@ -111,12 +116,14 @@ private:
             return;
 
         // check itername
-        std::shared_ptr<ASTLine> p_iterName = std::make_shared<ASTLine>(astlist.data[p_line->expansion.front()]);
+        p_iterName = std::make_shared<ASTLine>(astlist.data[p_line->expansion.front()]);
         while (!p_iterName->expansion.empty())
             p_iterName = std::make_shared<ASTLine>(astlist.data[p_iterName->expansion.front()]);
         if (iterName != p_iterName->key.token.getTokStr())
             return;
 
+        // check relation
+        std::shared_ptr<ASTLine> p_relation = std::make_shared<ASTLine>();
 
     }
     // 迭代变量名
