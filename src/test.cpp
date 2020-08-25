@@ -44,7 +44,7 @@ void test2()
 }
 void test3()
 {
-    string text = readStrFromFile("examples/jacobi-2d.cpp");
+    string text = readStrFromFile("examples/jacobi-1d.cpp");
     auto scopes = getScopes(text);
     for (const auto &scope : scopes)
     {
