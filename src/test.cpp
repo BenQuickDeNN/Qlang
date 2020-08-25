@@ -44,7 +44,7 @@ void test2()
 }
 void test3()
 {
-    string text = readStrFromFile("examples/jacobi-1d.cpp");
+    string text = readStrFromFile("examples/jacobi-2d.cpp");
     auto scopes = getScopes(text);
     for (const auto &scope : scopes)
     {
@@ -64,8 +64,7 @@ void test3()
         astlist.getDataFromAST(ast);
         cout << endl;
         cout << astlist.toString() << endl;
-        cout << endl;
-        cout << "Forloop Meta:" << endl;
+        cout << "--------------------------------------------get forloop meta--------------------------------------------" << endl;
         ForLoop _loop(astlist);
         cout << _loop.toString() << endl;
     }

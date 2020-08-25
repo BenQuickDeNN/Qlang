@@ -13,19 +13,22 @@ class ForLoop
 {
 public:
     ForLoop() {}
+
     ForLoop(const ASTList &astlist)
     {
         initFromASTList(astlist);
     }
+
     ForLoop(const ASTList &astlist, const size_t &maxIdx)
     {
         initFromASTList(astlist, maxIdx);
     }
+
     std::string toString() noexcept
     {
         std::string ret = "forloop: ";
         ret += "iterator = \"" + iterName + "\"; ";
-        ret += "range = [" + range._start + ',' + range._end;
+        ret += "range = [" + range._start + ", " + range._end;
         if (relation == LEQ || relation == GEQ)
             ret += ']';
         else if (relation == TT_ANGLE_BRACKET_L || TT_ANGLE_BRACKET_R)
@@ -38,11 +41,12 @@ public:
             ret += '\t' + innerloop->toString();
         return ret;
     }
+
     void initFromASTList(const ASTList &astlist)
     {
         initFromASTList(astlist, astlist.data.size() - 1);
     }
-private:
+
     void initFromASTList(const ASTList &astlist, const size_t &maxIdx)
     {
         if (maxIdx >= astlist.data.size())
@@ -66,8 +70,27 @@ private:
         const size_t forloopmetaIdx = forloopLine.expansion.front();
         auto &forloopmetaLine = astlist.data[forloopmetaIdx];
         getForloopmeta(astlist, forloopmetaLine);
+        findInnerLoop(astlist, forloopLine.expansion.back());
     }
 
+private:
+
+    void findInnerLoop(const ASTList &astlist, const size_t &idx)
+    {
+        if (idx >= astlist.data.size())
+            return;
+        const auto &line = astlist.data[idx];
+        if (line.key.token.getTokType() == (TokType)forloop)
+        {
+            innerLoops.push_back(std::make_shared<ForLoop>());
+            innerLoops.back()->initFromASTList(astlist, idx);
+            findInnerLoop(astlist, line.expansion.back());
+        }
+        else
+            for (const size_t &i : line.expansion)
+                findInnerLoop(astlist, i);
+    }
+    
     void getForloopmeta(const ASTList &astlist, const ASTLine &forloopmetaLine)
     {
         if (forloopmetaLine.key.token.getTokType() != (TokType)forloop_meta)
@@ -236,16 +259,12 @@ private:
             return;
         }
     }
-    // 迭代变量名 
-    std::string iterName;
-    // 迭代范围
-    Range<std::string> range;
-    TokType relation = LEQ;
-    // Range<std::vector<Token>> range;
-    Range<size_t> range_num; // 数字格式的range
-    // 迭代步长
-    std::string stride;
-    size_t stride_num;
-    // 嵌套循环
-    std::vector<std::shared_ptr<ForLoop>> innerLoops;
+
+    std::string iterName; // 迭代变量名 
+    Range<std::string> range; // 迭代范围
+    TokType relation = LEQ; // 迭代变量比较关系
+    Range<size_t> range_num; // 整数格式的迭代范围
+    std::string stride; // 迭代步长
+    size_t stride_num; // 整数格式的迭代步长
+    std::vector<std::shared_ptr<ForLoop>> innerLoops; // 嵌套循环
 };
