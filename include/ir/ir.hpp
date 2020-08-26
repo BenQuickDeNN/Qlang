@@ -7,34 +7,40 @@
 #include "../lexer/lexer.hpp"
 #include "../parser/parser.hpp"
 
-// 操作数
-union Operand {
-    std::string str; // 值
-    size_t idx; // 值所在的索引
-};
-
-
-// 三元式
-struct Ternary
+// 三地址码
+struct TACode
 {
-    uint64_t op; // 运算符
-    Operand opr1; // 操作数1
-    Operand opr2; // 操作数2
-};
-
-// 三元式表
-class TernaryList
-{
-public:
-    size_t getTernary(const std::shared_ptr<ASTNode> node)
+    uint64_t op; // 操作符
+    uint64_t addr1; // 操作数1
+    uint64_t addr2; // 操作数2
+    uint64_t addr_res; // 结果
+    void operator = (uint64_t arr[4])
     {
-        if (node == nullptr)
-            return;
-        // 深度优先后序遍历
-        for (const auto &child : node->children)
-            getTernary(child);
-        uint64_t tt = node->token.getTokType();
-        return data.size() - 1;
+        op = arr[0];
+        addr1 = arr[1];
+        addr2 = arr[2];
+        addr_res = arr[3];
     }
-    std::vector<Ternary> data;
 };
+
+// 为了和LLVM的IR区分，加一个命名空间
+namespace qlang
+{
+    class IR
+    {
+    public:
+        static std::vector<TACode> toTACodes(const ASTList &astlist)
+        {
+        }
+
+        static TACode toTACode(const ASTList &astlist, const size_t &idx)
+        {
+            if (idx >= astlist.data.size())
+                return {0, 0, 0, 0};
+            const auto &astline = astlist.data[idx];
+        }
+    
+    private:
+        std::vector<TACode> tac_list;
+    };
+}

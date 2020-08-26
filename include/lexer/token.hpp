@@ -109,6 +109,21 @@ enum TokType
 
     // OP_LEVEL_6,
 
+    // AST
+    root,
+    stmt_list,
+    stmt_block,
+    stmt,
+    expr,
+    expr_postfix,
+    expr_const,
+    expr_decl,
+    forloop_meta,
+    forloop,
+    last,
+
+    // qlang::IR
+
     // last
     LAST
 };

@@ -42,12 +42,12 @@ public:
         return ret;
     }
 
-    void initFromASTList(const ASTList &astlist)
+    void initFromASTList(const ASTList &astlist) noexcept
     {
         initFromASTList(astlist, astlist.data.size() - 1);
     }
 
-    void initFromASTList(const ASTList &astlist, const size_t &maxIdx)
+    void initFromASTList(const ASTList &astlist, const size_t &maxIdx) noexcept
     {
         if (maxIdx >= astlist.data.size())
             return;
@@ -75,7 +75,7 @@ public:
 
 private:
 
-    void findInnerLoop(const ASTList &astlist, const size_t &idx)
+    void findInnerLoop(const ASTList &astlist, const size_t &idx) noexcept
     {
         if (idx >= astlist.data.size())
             return;
@@ -91,7 +91,7 @@ private:
                 findInnerLoop(astlist, i);
     }
     
-    void getForloopmeta(const ASTList &astlist, const ASTLine &forloopmetaLine)
+    void getForloopmeta(const ASTList &astlist, const ASTLine &forloopmetaLine) noexcept
     {
         if (forloopmetaLine.key.token.getTokType() != (TokType)forloop_meta)
         {
