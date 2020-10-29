@@ -11,7 +11,7 @@ int main()
     const size_t Istart = 1;
     const size_t Iend = I - 1;
     const size_t len = 1;
-#pragma scope let Istart(1),Iend(9),len(1)
+#pragma scope
     /* single-step jacobi-1d demo */
     for (size_t i = Istart; i < Iend; i+=len)
         b[i] = 0.5 * (a[i-1] + a[i+1]);
