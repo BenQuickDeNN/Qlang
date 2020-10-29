@@ -4,14 +4,14 @@ using namespace std;
 const size_t I = 10;
 int main()
 {
-    vector<double> a(I), b(I);
+    vector<double> a(I), b(I), c(I);
     int d;
     int *p = & d;
     *p = d * *p;
     const size_t Istart = 1;
     const size_t Iend = I - 1;
     const size_t len = 1;
-#pragma scope
+#pragma scope let Istart(1),Iend(9),len(1)
     /* single-step jacobi-1d demo */
     for (size_t i = Istart; i < Iend; i+=len)
         b[i] = 0.5 * (a[i-1] + a[i+1]);
