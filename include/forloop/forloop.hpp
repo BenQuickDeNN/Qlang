@@ -51,7 +51,6 @@ public:
     {
         if (maxIdx >= astlist.data.size())
             return;
-        size_t forloopIdx;
         bool flag_findLoop = false;
         for (size_t i = maxIdx; i >= 0; --i)
         {
@@ -266,5 +265,6 @@ private:
     Range<size_t> range_num; // 整数格式的迭代范围
     std::string stride; // 迭代步长
     size_t stride_num; // 整数格式的迭代步长
+    size_t forloopIdx; // 循环在ASTList中的起始点
     std::vector<std::shared_ptr<ForLoop>> innerLoops; // 嵌套循环
 };
