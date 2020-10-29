@@ -26,11 +26,12 @@ public:
         data.emplace_back(astline);
         return data.size() - 1;
     }
-    std::string toString() noexcept
+
+    std::string toString(const size_t _maxIdx) noexcept
     {
         std::string ret = "ASTList:\n";
         ret += "index\ttoktype\tvalue\texpansions\n";
-        for (size_t i = 0; i < data.size(); ++i)
+        for (size_t i = 0; i <= _maxIdx; ++i)
         {
             ret += std::to_string(i) + '\t';
             auto it = TokStrMap.find(data[i].key.token.getTokType());
@@ -42,5 +43,10 @@ public:
             ret += '\n';
         }
         return ret;
+    }
+
+    std::string toString() noexcept
+    {
+        return toString(data.size() - 1);
     }
 };

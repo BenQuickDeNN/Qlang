@@ -66,6 +66,7 @@ public:
         auto &forloopLine = astlist.data[forloopIdx];
         if (forloopLine.expansion.empty())
             return;
+        p_astlist = std::make_shared<ASTList>(astlist);
         const size_t forloopmetaIdx = forloopLine.expansion.front();
         auto &forloopmetaLine = astlist.data[forloopmetaIdx];
         getForloopmeta(astlist, forloopmetaLine);
@@ -266,5 +267,6 @@ private:
     std::string stride; // 迭代步长
     size_t stride_num; // 整数格式的迭代步长
     size_t forloopIdx; // 循环在ASTList中的起始点
+    std::shared_ptr<ASTList> p_astlist; // 对应的ASTList
     std::vector<std::shared_ptr<ForLoop>> innerLoops; // 嵌套循环
 };
