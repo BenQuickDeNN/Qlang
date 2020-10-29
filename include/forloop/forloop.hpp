@@ -12,6 +12,16 @@
 class ForLoop
 {
 public:
+    std::string iterName; // 迭代变量名 
+    Range<std::string> range; // 迭代范围
+    TokType relation = LEQ; // 迭代变量比较关系
+    Range<size_t> range_num; // 整数格式的迭代范围
+    std::string stride; // 迭代步长
+    size_t stride_num; // 整数格式的迭代步长
+    size_t forloopIdx; // 循环在ASTList中的起始点
+    std::shared_ptr<ASTList> p_astlist; // 对应的ASTList
+    std::vector<std::shared_ptr<ForLoop>> innerLoops; // 嵌套循环
+    
     ForLoop() {}
 
     ForLoop(const ASTList &astlist)
@@ -259,14 +269,4 @@ private:
             return;
         }
     }
-
-    std::string iterName; // 迭代变量名 
-    Range<std::string> range; // 迭代范围
-    TokType relation = LEQ; // 迭代变量比较关系
-    Range<size_t> range_num; // 整数格式的迭代范围
-    std::string stride; // 迭代步长
-    size_t stride_num; // 整数格式的迭代步长
-    size_t forloopIdx; // 循环在ASTList中的起始点
-    std::shared_ptr<ASTList> p_astlist; // 对应的ASTList
-    std::vector<std::shared_ptr<ForLoop>> innerLoops; // 嵌套循环
 };

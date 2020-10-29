@@ -67,5 +67,7 @@ void test3()
         cout << "--------------------------------------------get forloop meta--------------------------------------------" << endl;
         ForLoop _loop(astlist);
         cout << _loop.toString() << endl;
+        cout << "--------------------------------------------astlist in forloop--------------------------------------------" << endl;
+        cout << _loop.p_astlist->toString(_loop.forloopIdx) << endl;
     }
 }
